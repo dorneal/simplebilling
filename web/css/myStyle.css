@@ -1,0 +1,279 @@
+* {
+    padding: 0;
+    margin: 0
+}
+
+.nav-bgc {
+    background-color: rgba(255, 255, 255, 1);
+}
+
+div.title-img1 img {
+    width: 40%;
+    display: inline;
+}
+
+footer div ul.footer-ul {
+    float: left;
+    margin-right: 10px;
+}
+
+footer div ul.footer-ul li {
+    list-style-type: none;
+}
+
+footer.footer {
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    margin-top: 10px;
+    background-color: #f5f5f5;
+}
+
+footer a {
+    text-decoration: none;
+    color: #000000;
+}
+
+footer a:hover {
+    text-decoration: none;
+    color: #cccccc;
+}
+
+aside div.aside {
+    position: fixed;
+    top: 60%;
+    left: 0;
+    width: 50px;
+    height: 204px;
+    text-decoration: none;
+    z-index: 1000;
+}
+
+aside div.aside ul li {
+    list-style-type: none;
+    width: 50px;
+    height: 40px;
+    margin-top: 1px;
+}
+
+aside div.aside ul li a {
+    display: block;
+    text-align: center;
+    width: 25px;
+    height: 25px;
+    line-height: 25px;
+    color: #000;
+    font-size: 1.5em;
+    background: rgba(255, 255, 255, 0);
+    border-radius: 50%;
+}
+
+aside div.aside ul li a:hover {
+    text-decoration: none;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    background: rgba(248, 248, 248, 1);
+}
+
+section div.title-bac {
+    border: 1px solid #f7efff;
+    padding: 20px;
+    background-color: rgba(238, 238, 238, 1);
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom: solid 3px #000000;
+}
+
+section .clock {
+    color: #000;
+}
+
+section .clock #Date {
+    font-family: 'BebasNeueRegular', Arial, Helvetica, sans-serif;
+    font-size: 2em;
+    text-align: center;
+    text-shadow: 0 0 5px #ccc;
+}
+
+section .clock ul {
+    padding: 0;
+    list-style: none;
+    text-align: center;
+}
+
+section .clock ul li {
+    display: inline;
+    font-size: 3em;
+    text-align: center;
+    font-family: 'BebasNeueRegular', Arial, Helvetica, sans-serif;
+    text-shadow: 0 0 5px #ccc;
+}
+
+section .clock #Date ul li.point {
+    position: relative;
+    -moz-animation: mymove 1s ease infinite;
+    -webkit-animation: mymove 1s ease infinite;
+}
+
+footer div.container div.visible-xs div.row div.col-md-12 ul li {
+    float: left;
+    list-style-type: none;
+    margin-right: 10px;
+    font-size: 1.5em;
+}
+
+article section div.first-show {
+    /*padding: 20px;*/
+    width: 100%;
+    background: no-repeat center;
+    text-align: center;
+}
+
+article section div.first-show div.container div.row div.col-md-2 img {
+    margin-top: -20px;
+    max-width: 50%;
+    display: inline-block;
+}
+
+article section div.first-show img {
+    max-width: 50%;
+    display: inline-block;
+}
+
+article section div.first-show a.big-a {
+    font-size: 2em;
+}
+
+article section div.second-show {
+    width: 100%;
+    text-align: center;
+    padding: 20px;
+    line-height: 100%;
+    background: no-repeat center;
+}
+
+article section div.second-show img {
+    max-width: 60%;
+    display: inline-block;
+
+}
+
+article section div.three-show {
+    padding: 20px;
+    text-align: center;
+    width: 100%;
+    line-height: 100%;
+    background: no-repeat center;
+}
+
+article section div.three-show img {
+    max-width: 60%;
+    display: inline-block;
+}
+
+article section div.four-show {
+    width: 100%;
+    padding: 40px 20px 40px 20px;
+    line-height: 100%;
+    text-align: center;
+    background: no-repeat center;
+}
+
+article section div.four-show img {
+    display: inline-block;
+}
+
+article section div.five-show {
+    padding: 40px 20px 40px 20px;
+    text-align: center;
+    width: 100%;
+    line-height: 100%;
+    background: no-repeat center;
+}
+
+/*注册页面*/
+section div.register-frame {
+    border: 1px solid #888888;
+    border-radius: 15px;
+    margin: 0 auto;
+    position: relative;
+    height: 100%;
+    padding: 20px;
+    background: #f7f7f7;
+}
+
+.pro-bar {
+    padding: 40px;
+}
+
+div.pro-bar div.progress {
+    margin-bottom: 0;
+}
+
+.avatar {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.avatar img {
+}
+
+span.icon-big-color {
+    font-size: 1.4em;
+    color: #0f0f0f;
+}
+
+a.circle-btn {
+    line-height: 40px;
+    border-radius: 50%;
+    border: 2px solid #cccccc;
+    width: 60px;
+    height: 60px;
+    font-size: 1.5em;
+}
+
+/*关于本站页面*/
+div.about-showMyself {
+    border: 1px solid #c0c0c0;
+    margin-top: 50px;
+    padding: 20px;
+}
+
+div.verification-code {
+    border: 1px solid #000;
+    display: inline;
+    width: 100px;
+    height: 50px;
+    background: #1b6d85;
+}
+
+input[type=button].login-btn {
+    margin-top: 10px;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    width: 100%;
+    height: 50px;
+    display: block;
+    border: none;
+    font-size: 1.6em;
+    color: #000;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+input[type=button].login-btn:hover {
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    width: 100%;
+    height: 50px;
+    display: block;
+    background-color: #4cae4c;
+}
+
+div#v_container {
+    padding: 0;
+    text-align: center;
+    width: 100%;
+    height: 50px;
+    margin-bottom: 10px;
+}

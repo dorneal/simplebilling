@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>关于本站</title>
+    <link rel="shortcut icon" href="/simplebilling/img/icon/webIcon.ico">
+    <link rel="stylesheet" href="/simplebilling/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/simplebilling/css/myStyle.css">
+    <link rel="stylesheet" href="/simplebilling/css/style.css">
+    <script src="/simplebilling/js/jquery-3.2.1.js"></script>
+    <script src="/simplebilling/js/bootstrap.min.js"></script>
+    <script src="/simplebilling/js/clock.js"></script>
+</head>
+<body>
+<!--特殊背景-->
+<canvas id="J_dotLine" style="background-color: rgba(255,255,255,1);z-index: 0;position: fixed;"></canvas>
+<script>
+    function Dotline(option) {
+        this.opt = this.extend({
+            dom: 'J_dotLine',//画布id
+            cw: 10000,//画布宽
+            ch: 500,//画布高
+            ds: 100,//点的个数
+            r: 0.5,//圆点半径
+            dis: 100//触发连线的距离
+        }, option);
+        this.c = document.getElementById(this.opt.dom);//canvas元素id
+        this.ctx = this.c.getContext('2d');
+        this.c.width = this.opt.cw;//canvas宽
+        this.c.height = this.opt.ch;//canvas高
+        this.dotSum = this.opt.ds;//点的数量
+        this.radius = this.opt.r;//圆点的半径
+        this.disMax = this.opt.dis * this.opt.dis;//点与点触发连线的间距
+        this.dots = [];
+        //requestAnimationFrame控制canvas动画
+        var RAF = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function (callback) {
+            window.setTimeout(callback, 1000 / 60);
+        };
+        var _self = this;
+        //增加鼠标效果
+        var mousedot = {x: null, y: null, label: 'mouse'};
+        this.c.onmousemove = function (e) {
+            var e = e || window.event;
+            mousedot.x = e.clientX - _self.c.offsetLeft;
+            mousedot.y = e.clientY - _self.c.offsetTop;
+        };
+        this.c.onmouseout = function (e) {
+            mousedot.x = null;
+            mousedot.y = null;
+        };
+        //控制动画
+        this.animate = function () {
+            _self.ctx.clearRect(0, 0, _self.c.width, _self.c.height);
+            _self.drawLine([mousedot].concat(_self.dots));
+            RAF(_self.animate);
+        };
+    }
+
+    //合并配置项，es6直接使用obj.assign();
+    Dotline.prototype.extend = function (o, e) {
+        for (var key in e) {
+            if (e[key]) {
+                o[key] = e[key]
+            }
+        }
+        return o;
+    };
+    //画点
+    Dotline.prototype.addDots = function () {
+        var dot;
+        for (var i = 0; i < this.dotSum; i++) {//参数
+            dot = {
+                x: Math.floor(Math.random() * this.c.width) - this.radius,
+                y: Math.floor(Math.random() * this.c.height) - this.radius,
+                ax: (Math.random() * 2 - 1) / 1.5,
+                ay: (Math.random() * 2 - 1) / 1.5
+            }
+            this.dots.push(dot);
+        }
+    };
+    //点运动
+    Dotline.prototype.move = function (dot) {
+        dot.x += dot.ax;
+        dot.y += dot.ay;
+        //点碰到边缘返回
+        dot.ax *= (dot.x > (this.c.width - this.radius) || dot.x < this.radius) ? -1 : 1;
+        dot.ay *= (dot.y > (this.c.height - this.radius) || dot.y < this.radius) ? -1 : 1;
+        //绘制点
+        this.ctx.beginPath();
+        this.ctx.arc(dot.x, dot.y, this.radius, 0, Math.PI * 2, true);
+        this.ctx.stroke();
+    };
+    //点之间画线
+    Dotline.prototype.drawLine = function (dots) {
+        var nowDot;
+        var _that = this;
+        //自己的思路：遍历两次所有的点，比较点之间的距离，函数的触发放在animate里
+        this.dots.forEach(function (dot) {
+
+            _that.move(dot);
+            for (var j = 0; j < dots.length; j++) {
+                nowDot = dots[j];
+                if (nowDot === dot || nowDot.x === null || nowDot.y === null) continue;//continue跳出当前循环开始新的循环
+                var dx = dot.x - nowDot.x,//别的点坐标减当前点坐标
+                    dy = dot.y - nowDot.y;
+                var dc = dx * dx + dy * dy;
+                if (Math.sqrt(dc) > Math.sqrt(_that.disMax)) continue;
+                // 如果是鼠标，则让粒子向鼠标的位置移动
+                if (nowDot.label && Math.sqrt(dc) > Math.sqrt(_that.disMax) / 2) {
+                    dot.x -= dx * 0.02;
+                    dot.y -= dy * 0.02;
+                }
+                var ratio;
+                ratio = (_that.disMax - dc) / _that.disMax;
+
+                _that.ctx.beginPath();
+                _that.ctx.lineWidth = ratio / 2;
+                _that.ctx.strokeStyle = 'rgba(0,0,0,' + (ratio - 0.6) + ')';
+                _that.ctx.moveTo(dot.x, dot.y);
+                _that.ctx.lineTo(nowDot.x, nowDot.y);
+                _that.ctx.stroke();//不描边看不出效果
+
+                //dots.splice(dots.indexOf(dot), 1);
+            }
+        });
+    };
+    //开始动画
+    Dotline.prototype.start = function () {
+        var _that = this;
+        this.addDots();
+        setTimeout(function () {
+            _that.animate();
+        }, 100);
+    };
+    //调用
+    window.onload = function () {
+        if (window.innerWidth < 1980 && window.innerWidth > 800) {
+            var dotline = new Dotline({
+                dom: 'J_dotLine',//画布id
+                cw: window.innerWidth,//画布宽
+                ch: window.innerHeight,//画布高
+                ds: 200,//点的个数
+                r: 0.1,//圆点半径
+                dis: 200//触发连线的距离
+            }).start();
+        } else {
+            var dotline = new Dotline({
+                dom: 'J_dotLine',//画布id
+                cw: window.innerWidth,//画布宽
+                ch: window.innerHeight,//画布高
+                ds: 50,//点的个数
+                r: 0.1,//圆点半径
+                dis: 100//触发连线的距离
+            }).start();
+        }
+    }
+</script>
+
+<!--头部-->
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("ul#nav").find("li").each(function () {
+            var a = $(this).find("a:first")[0];
+            if ($(a).attr("href") === location.pathname) {
+                $(this).addClass("active");
+            } else {
+                $(this).removeClass("active");
+            }
+        });
+    });
+</script>
+<header id="header" class="">
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-default navbar-fixed-top nav-bgc" role="navigation">
+        <div class="container-fluid container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Simple <span class="icon-coin-yen"></span> Billing</a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="#">主页</a>
+                    </li>
+                    <li>
+                        <a href="#">进入系统</a>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            帮助 <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="#">Action</a>
+                            </li>
+                            <li>
+                                <a href="#">Another action</a>
+                            </li>
+                            <li>
+                                <a href="#">Something else here</a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="#">Separated link</a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="#">One more separated link</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#">关于本站</a>
+                    </li>
+                </ul>
+                <!--<form class="navbar-form navbar-left" role="search">-->
+                <!--<div class="form-group">-->
+                <!--<input type="text" class="form-control" placeholder="Search" style="width: 100px;"></div>-->
+                <!--<button type="submit" class="btn btn-default"><span class="icon-search"></span></button>-->
+                <!--</form>-->
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="#" style="font-size: 1.2em;"><span class="icon-clipboard"></span> 注册</a>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" style="font-size: 1.2em;"><span class="icon-enter"></span> 登录</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </nav>
+</header><!-- /header -->
+
+<!--侧边栏-->
+<aside class="hidden-xs">
+    <div class="aside">
+        <ul>
+            <li><a href="" target="_blank"><span class="icon-github"></span></a></li>
+            <li><a href="" target="_blank"><span class="icon-linkedin"></span></a></li>
+            <li><a href="" target="_blank"><span class="icon-mail4"></span></a></li>
+            <li><a href="" target="_blank"><span class="icon-bubbles"></span></a></li>
+        </ul>
+    </div>
+</aside>
+
+<!--主要内容-->
+<section>
+    <div class="container" style="margin-top: 70px;margin-bottom: 30px;">
+        <div class="row">
+            <div class="col-md-8">
+                <h1>关于本站</h1>
+                <p style="font-size: 1.3em;">&nbsp;&nbsp;&nbsp;&nbsp;本站是基于JSP设计的记账管理系统，后台使用Servlet编写，数据库使用MySql。</p>
+                <p style="font-size: 1.3em;">&nbsp;&nbsp;&nbsp;&nbsp;本站的基本功能就是记账，与传统记账不同，我们基于Bootstrap前端框架设计的响应式网站，可在各类设备浏览，而不用担心显示效果，更便于您的及时记录</p>
+                <p style="font-size: 1.3em;"></p>
+            </div>
+            <div class="col-md-4" style="float: right;margin-top: 70px;">
+                <div class="row">
+                    <div class="col-md-12 register-frame">
+                        <div class="thumbnail">
+                            <video width="100%" height="100%" controls="controls">
+                                <!--<source src="/i/movie.ogg" type="video/ogg"/>-->
+                                <source src="../../movie/movie2.mp4" type="video/mp4"/>
+                                <!--<source src="/i/movie.webm" type="video/webm"/>-->
+                                <object data="../../movie/movie2.mp4" width="100%" height="100%">
+                                    <embed width="100%" height="100%" src="../../movie/movie2.mp4"></embed>
+                                </object>
+                            </video>
+                        </div>
+                        <div class="col-md-1"></div>
+                        <div class="col-md-10">
+                            <h1>本站作者</h1>
+                            <h1></h1>
+                        </div>
+                        <div class="col-md-1"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 尾部 -->
+<footer class="footer">
+    <div class="container">
+        <div class="visible-xs">
+            <h3>联系我</h3>
+            <div class="row">
+                <div class="col-md-12">
+                    <ul>
+                        <li><a href="" target="_blank"><span class="icon-github"></span></a></li>
+                        <li><a href="" target="_blank"><span class="icon-linkedin"></span></a></li>
+                        <li><a href="" target="_blank"><span class="icon-mail4"></span></a></li>
+                        <li><a href="" target="_blank"><span class="icon-bubbles"></span></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <h3>友情链接</h3>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="footer-ul">
+                    <li><a href="" title="" target="_blank">百度</a></li>
+                    <li><a href="" title="" target="_blank">百度</a></li>
+                </ul>
+                <ul class="footer-ul">
+                    <li><a href="" title="" target="_blank">百度</a></li>
+                    <li><a href="" title="" target="_blank">百度</a></li>
+                </ul>
+                <ul class="footer-ul">
+                    <li><a href="" title="" target="_blank">百度</a></li>
+                    <li><a href="" title="" target="_blank">百度</a></li>
+                </ul>
+                <ul class="footer-ul">
+                    <li><a href="" title="" target="_blank">百度</a></li>
+                    <li><a href="" title="" target="_blank">百度</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-center"><p style="font-size: 1.1em;">CopyRight&copy;2017 | Design By Neal | <a
+                    href="" target="_blank">备案号：</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- /footer -->
+</body>
+</html>

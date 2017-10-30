@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>注册</title>
+    <link rel="shortcut icon" href="/simplebilling/img/icon/webIcon.ico">
+    <link rel="stylesheet" href="/simplebilling/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/simplebilling/css/myStyle.css">
+    <link rel="stylesheet" href="/simplebilling/css/style.css">
+    <script src="/simplebilling/js/jquery-3.2.1.js"></script>
+    <script src="/simplebilling/js/bootstrap.min.js"></script>
+    <script src="/simplebilling/js/clock.js"></script>
+    <link href="/simplebilling/css/cropper.min.css" rel="stylesheet">
+    <link href="/simplebilling/css/sitelogo.css" rel="stylesheet">
+    <script src="/simplebilling/js/cropper.min.js"></script>
+    <script src="/simplebilling/js/sitelogo.js"></script>
+    <style type="text/css">
+        .progress {
+            height: 25px;
+            background: #262626;
+            padding: 5px;
+            overflow: visible;
+            border-radius: 20px;
+            border-top: 1px solid #000;
+            border-bottom: 1px solid #7992a8;
+        }
+
+        .progress .progress-bar {
+            border-radius: 20px;
+            position: relative;
+            animation: animate-positive 2s;
+        }
+
+        .progress .progress-value {
+            display: block;
+            padding: 3px 7px;
+            font-size: 13px;
+            color: #fff;
+            border-radius: 4px;
+            background: #191919;
+            border: 1px solid #000;
+            position: absolute;
+            top: -40px;
+            right: -10px;
+        }
+
+        .progress .progress-value:after {
+            content: "";
+            border-top: 10px solid #191919;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            position: absolute;
+            bottom: -6px;
+            left: 26%;
+        }
+
+        .progress-bar.active {
+            animation: reverse progress-bar-stripes 0.40s linear infinite, animate-positive 2s;
+        }
+
+        @-webkit-keyframes animate-positive {
+            0% {
+                width: 0;
+            }
+        }
+
+        @keyframes animate-positive {
+            0% {
+                width: 0;
+            }
+        }
+    </style>
+</head>
+<body style="background: #333;">
+<!--特殊背景-->
+<canvas id="J_dotLine" style="background-color: rgba(255,255,255,1);z-index: 0;position: fixed;"></canvas>
+<script>
+    function Dotline(option) {
+        this.opt = this.extend({
+            dom: 'J_dotLine',//画布id
+            cw: 1000,//画布宽
+            ch: 500,//画布高
+            ds: 100,//点的个数
+            r: 0.5,//圆点半径
+            dis: 100//触发连线的距离
+        }, option);
+        this.c = document.getElementById(this.opt.dom);//canvas元素id
+        this.ctx = this.c.getContext('2d');
+        this.c.width = this.opt.cw;//canvas宽
+        this.c.height = this.opt.ch;//canvas高
+        this.dotSum = this.opt.ds;//点的数量
+        this.radius = this.opt.r;//圆点的半径
+        this.disMax = this.opt.dis * this.opt.dis;//点与点触发连线的间距
+        this.dots = [];
+        //requestAnimationFrame控制canvas动画
+        var RAF = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function (callback) {
+            window.setTimeout(callback, 1000 / 60);
+        };
+        var _self = this;
+        //增加鼠标效果
+        var mousedot = {x: null, y: null, label: 'mouse'};
+        this.c.onmousemove = function (e) {
+            var e = e || window.event;
+            mousedot.x = e.clientX - _self.c.offsetLeft;
+            mousedot.y = e.clientY - _self.c.offsetTop;
+        };
+        this.c.onmouseout = function (e) {
+            mousedot.x = null;
+            mousedot.y = null;
+        };
+        //控制动画
+        this.animate = function () {
+            _self.ctx.clearRect(0, 0, _self.c.width, _self.c.height);
+            _self.drawLine([mousedot].concat(_self.dots));
+            RAF(_self.animate);
+        };
+    }
+
+    //合并配置项，es6直接使用obj.assign();
+    Dotline.prototype.extend = function (o, e) {
+        for (var key in e) {
+            if (e[key]) {
+                o[key] = e[key]
+            }
+        }
+        return o;
+    };
+    //画点
+    Dotline.prototype.addDots = function () {
+        var dot;
+        for (var i = 0; i < this.dotSum; i++) {//参数
+            dot = {
+                x: Math.floor(Math.random() * this.c.width) - this.radius,
+                y: Math.floor(Math.random() * this.c.height) - this.radius,
+                ax: (Math.random() * 2 - 1) / 1.5,
+                ay: (Math.random() * 2 - 1) / 1.5
+            }
+            this.dots.push(dot);
+        }
+    };
+    //点运动
+    Dotline.prototype.move = function (dot) {
+        dot.x += dot.ax;
+        dot.y += dot.ay;
+        //点碰到边缘返回
+        dot.ax *= (dot.x > (this.c.width - this.radius) || dot.x < this.radius) ? -1 : 1;
+        dot.ay *= (dot.y > (this.c.height - this.radius) || dot.y < this.radius) ? -1 : 1;
+        //绘制点
+        this.ctx.beginPath();
+        this.ctx.arc(dot.x, dot.y, this.radius, 0, Math.PI * 2, true);
+        this.ctx.stroke();
+    };
+    //点之间画线
+    Dotline.prototype.drawLine = function (dots) {
+        var nowDot;
+        var _that = this;
+        //自己的思路：遍历两次所有的点，比较点之间的距离，函数的触发放在animate里
+        this.dots.forEach(function (dot) {
+
+            _that.move(dot);
+            for (var j = 0; j < dots.length; j++) {
+                nowDot = dots[j];
+                if (nowDot === dot || nowDot.x === null || nowDot.y === null) continue;//continue跳出当前循环开始新的循环
+                var dx = dot.x - nowDot.x,//别的点坐标减当前点坐标
+                    dy = dot.y - nowDot.y;
+                var dc = dx * dx + dy * dy;
+                if (Math.sqrt(dc) > Math.sqrt(_that.disMax)) continue;
+                // 如果是鼠标，则让粒子向鼠标的位置移动
+                if (nowDot.label && Math.sqrt(dc) > Math.sqrt(_that.disMax) / 2) {
+                    dot.x -= dx * 0.02;
+                    dot.y -= dy * 0.02;
+                }
+                var ratio;
+                ratio = (_that.disMax - dc) / _that.disMax;
+
+                _that.ctx.beginPath();
+                _that.ctx.lineWidth = ratio / 2;
+                _that.ctx.strokeStyle = 'rgba(0,0,0,' + (ratio - 0.6) + ')';
+                _that.ctx.moveTo(dot.x, dot.y);
+                _that.ctx.lineTo(nowDot.x, nowDot.y);
+                _that.ctx.stroke();//不描边看不出效果
+
+                //dots.splice(dots.indexOf(dot), 1);
+            }
+        });
+    };
+    //开始动画
+    Dotline.prototype.start = function () {
+        var _that = this;
+        this.addDots();
+        setTimeout(function () {
+            _that.animate();
+        }, 100);
+    };
+    //调用
+    window.onload = function () {
+        if (window.innerWidth < 1980 && window.innerWidth > 800) {
+            var dotline = new Dotline({
+                dom: 'J_dotLine',//画布id
+                cw: window.innerWidth,//画布宽
+                ch: window.innerHeight,//画布高
+                ds: 200,//点的个数
+                r: 0.1,//圆点半径
+                dis: 200//触发连线的距离
+            }).start();
+        } else {
+            var dotline = new Dotline({
+                dom: 'J_dotLine',//画布id
+                cw: window.innerWidth,//画布宽
+                ch: window.innerHeight,//画布高
+                ds: 50,//点的个数
+                r: 0.1,//圆点半径
+                dis: 100//触发连线的距离
+            }).start();
+        }
+    }
+</script>
+
+<!--注册内容-->
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <div class="tab-content" id="myTab">
+                    <!--注册界面-->
+                    <div class="tab-pane fade in active" id="register">
+                        <div class="pro-bar">
+                            <span style="font-size: 1.4em;color: #000">注册中.....<label
+                                    style="font-style: italic;">66%</label></span>
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-info progress-bar-striped active"
+                                     role="progressbar"
+                                     aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                     style="width: 66%;">
+                                    <div class="progress-value">66%</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="col-md-2"></div>
+                                <div class="col-md-8 register-frame">
+                                    <div class="thumbnail" style="text-align: center;">
+                                        <div class="ibox-content">
+                                            <div class="row">
+                                                <div id="crop-avatar" class="col-md-12"
+                                                     style="margin: 0 auto;text-align: center;display: block;">
+                                                    <div class="avatar-view" title="Change Logo Picture">
+                                                        <img src="/simplebilling/img/logo.jpg" alt="选择你的头像"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal fade" id="avatar-modal" aria-hidden="true"
+                                             aria-labelledby="avatar-modal-label" role="dialog" tabindex="-1">
+                                            <div class="modal-dialog modal-lg">
+                                                <div class="modal-content">
+                                                    <form class="avatar-form" action="user/UserRegisterServlet"
+                                                          enctype="multipart/form-data" method="post">
+                                                        <div class="modal-header">
+                                                            <button class="close" data-dismiss="modal" type="button">
+                                                                &times;
+                                                            </button>
+                                                            <h4 class="modal-title" id="avatar-modal-label">选择你的头像</h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="avatar-body">
+                                                                <div class="avatar-upload">
+                                                                    <input class="avatar-src" name="avatar_src"
+                                                                           type="hidden">
+                                                                    <input class="avatar-data" name="avatar_data"
+                                                                           type="hidden">
+                                                                    <label for="avatarInput">图片上传</label>
+                                                                    <input class="avatar-input" id="avatarInput"
+                                                                           name="avatar_file" type="file"></div>
+                                                                <div class="row">
+                                                                    <div class="col-md-9">
+                                                                        <div class="avatar-wrapper"></div>
+                                                                    </div>
+                                                                    <div class="col-md-3">
+                                                                        <div class="avatar-preview preview-lg"></div>
+                                                                        <div class="avatar-preview preview-md"></div>
+                                                                        <div class="avatar-preview preview-sm"></div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row avatar-btns">
+                                                                    <div class="col-md-9">
+                                                                        <div class="btn-group">
+                                                                            <button class="btn" data-method="rotate"
+                                                                                    data-option="-90" type="button"
+                                                                                    title="Rotate -90 degrees"><i
+                                                                                    class="fa fa-undo"></i> 向左旋转
+                                                                            </button>
+                                                                        </div>
+                                                                        <div class="btn-group">
+                                                                            <button class="btn" data-method="rotate"
+                                                                                    data-option="90" type="button"
+                                                                                    title="Rotate 90 degrees"><i
+                                                                                    class="fa fa-repeat"></i> 向右旋转
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-3">
+                                                                        <button class="btn btn-success btn-block avatar-save"
+                                                                                type="submit"><i
+                                                                                class="fa fa-save"></i> 保存修改
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="loading" aria-label="Loading" role="img" tabindex="-1"></div>
+                                    </div>
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-10">
+                                        <form class="bs-example bs-example-form" role="form">
+                                            <div class="input-group">
+                                                <span class="input-group-addon icon-user icon-big-color"></span>
+                                                <input id="input1" type="text" class="form-control" placeholder="用户名"
+                                                       maxlength="10">
+                                            </div>
+                                            <span class="input1"></span>
+                                            <br>
+                                            <div class="input-group">
+                                                <span class="icon-users input-group-addon icon-big-color"></span>
+                                                <select id="input2" class="form-control">
+                                                    <option value="男">男</option>
+                                                    <option value="女">女</option>
+                                                </select>
+                                            </div>
+                                            <br>
+                                            <div class="input-group">
+                                                <span class="input-group-addon icon-mobile icon-big-color"></span>
+                                                <input id="input3" type="tel" class="form-control" maxlength="11"
+                                                       minlength="11" placeholder="手机号码">
+                                            </div>
+                                            <span class="input2"></span>
+                                            <br>
+                                            <div class="input-group">
+                                                <span class="input-group-addon icon-mail icon-big-color"></span>
+                                                <input id="input4" type="email" class="form-control" maxlength="50"
+                                                       placeholder="Email">
+                                            </div>
+                                            <span class="input3"></span>
+                                            <br>
+                                            <div class="input-group">
+                                                <span class="input-group-addon icon-key icon-big-color"></span>
+                                                <input id="input5" type="password" class="form-control" maxlength="6"
+                                                       minlength="6"
+                                                       placeholder="6位数密码">
+                                            </div>
+                                            <span class="input4"></span>
+                                            <br>
+                                            <div class="input-group">
+                                                <span class="input-group-addon icon-key icon-big-color"></span>
+                                                <input id="input6" type="password" class="form-control" maxlength="6"
+                                                       minlength="6"
+                                                       placeholder="再次输入密码">
+                                            </div>
+                                            <span class="input5"></span>
+                                            <br>
+                                            <div class="input-group" style="text-align: center;">
+                                                <label>
+                                <textarea id="input7" class="form-control" rows="3" cols="50"
+                                          style="resize:none;" placeholder="个性签名">
+                                </textarea>
+                                                </label>
+                                            </div>
+                                            <br>
+                                            <div style="text-align: center;">
+                                                <a type="submit" href="index.html"
+                                                   class="btn btn-default btn-success">主页</a>
+                                                <a type="submit" href="registerStep1.html"
+                                                   class="btn btn-default btn-success">↞</a>
+                                                <a type="submit" href="user/UserRegisterServlet"
+                                                   class="btn btn-default btn-success">↠</a>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="col-md-1"></div>
+                                </div>
+                                <div class="col-md-2"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--简单表单验证-->
+                    <script>
+                        // 正则验证
+                        var nameReg = /^[a-zA-Z0-9_]+$/;
+                        var phoneReg = /^1[3|4|5|8][0-9]\d{4,8}$/;
+                        var emailReg = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+                        var passwordReg = /^\d{6}$/;
+
+                        //验证
+                        $(document).ready(function () {
+                            $('input#input1').blur(function () {
+                                var userName = $('input#input1').val().trim();
+                                if (!nameReg.test(userName)) {
+                                    $('span.input1').html("请输入字母跟数字").css("color", "red");
+                                } else {
+                                    $('span.input1').empty();
+                                    $('div.input-group:eq(0)').addClass("has-success");
+                                }
+                            });
+                            $('input#input3').blur(function () {
+                                var userPhoneNum = $('input#input3').val().trim();
+                                if (!phoneReg.test(userPhoneNum)) {
+                                    $('span.input2').html("请输入正确的手机号码").css("color", "red");
+                                } else {
+                                    $('span.input2').empty();
+                                    $('div.input-group:eq(2)').addClass("has-success");
+                                }
+                            });
+                            $('input#input4').blur(function () {
+                                var userEmail = $('input#input4').val().trim();
+                                if (!emailReg.test(userEmail)) {
+                                    $('span.input3').html("请输入正确的邮箱").css("color", "red");
+                                } else {
+                                    $('span.input3').empty();
+                                    $('div.input-group:eq(3)').addClass("has-success");
+                                }
+                            });
+                            $('input#input5').blur(function () {
+                                var userPassword = $('input#input5').val().trim();
+                                if (!passwordReg.test(userPassword)) {
+                                    $('span.input4').html("请输入6位数密码").css("color", "red");
+                                } else {
+                                    $('span.input4').empty();
+                                    $('div.input-group:eq(4)').addClass("has-success");
+                                }
+                            });
+                            $('input#input6').blur(function () {
+                                var userPassword = $('input#input5').val().trim();
+                                var userPassword2 = $('input#input6').val().trim();
+                                if (userPassword2 !== userPassword) {
+                                    $('span.input5').html("两次密码不一致").css("color", "red");
+                                } else {
+                                    $('span.input5').empty();
+                                    $('div.input-group:eq(5)').addClass("has-success");
+                                }
+                            });
+                        });
+                    </script>
+                </div>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

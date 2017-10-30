@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>注册</title>
+    <link rel="shortcut icon" href="/simplebilling/img/icon/webIcon.ico">
+    <link rel="stylesheet" href="/simplebilling/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/simplebilling/css/myStyle.css">
+    <link rel="stylesheet" href="/simplebilling/css/style.css">
+    <script src="/simplebilling/js/jquery-3.2.1.js"></script>
+    <script src="/simplebilling/js/bootstrap.min.js"></script>
+    <script src="/simplebilling/js/clock.js"></script>
+    <link href="/simplebilling/css/cropper.min.css" rel="stylesheet">
+    <link href="/simplebilling/css/sitelogo.css" rel="stylesheet">
+    <script src="/simplebilling/js/cropper.min.js"></script>
+    <script src="/simplebilling/js/sitelogo.js"></script>
+    <style type="text/css">
+        .progress {
+            height: 25px;
+            background: #262626;
+            padding: 5px;
+            overflow: visible;
+            border-radius: 20px;
+            border-top: 1px solid #000;
+            border-bottom: 1px solid #7992a8;
+        }
+
+        .progress .progress-bar {
+            border-radius: 20px;
+            position: relative;
+            animation: animate-positive 2s;
+        }
+
+        .progress .progress-value {
+            display: block;
+            padding: 3px 7px;
+            font-size: 13px;
+            color: #fff;
+            border-radius: 4px;
+            background: #191919;
+            border: 1px solid #000;
+            position: absolute;
+            top: -40px;
+            right: -10px;
+        }
+
+        .progress .progress-value:after {
+            content: "";
+            border-top: 10px solid #191919;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            position: absolute;
+            bottom: -6px;
+            left: 26%;
+        }
+
+        .progress-bar.active {
+            animation: reverse progress-bar-stripes 0.40s linear infinite, animate-positive 2s;
+        }
+
+        @-webkit-keyframes animate-positive {
+            0% {
+                width: 0;
+            }
+        }
+
+        @keyframes animate-positive {
+            0% {
+                width: 0;
+            }
+        }
+    </style>
+</head>
+<body style="background: #333;">
+<!--特殊背景-->
+<canvas id="J_dotLine" style="background-color: rgba(255,255,255,1);z-index: 0;position: fixed;"></canvas>
+<script>
+    function Dotline(option) {
+        this.opt = this.extend({
+            dom: 'J_dotLine',//画布id
+            cw: 1000,//画布宽
+            ch: 500,//画布高
+            ds: 100,//点的个数
+            r: 0.5,//圆点半径
+            dis: 100//触发连线的距离
+        }, option);
+        this.c = document.getElementById(this.opt.dom);//canvas元素id
+        this.ctx = this.c.getContext('2d');
+        this.c.width = this.opt.cw;//canvas宽
+        this.c.height = this.opt.ch;//canvas高
+        this.dotSum = this.opt.ds;//点的数量
+        this.radius = this.opt.r;//圆点的半径
+        this.disMax = this.opt.dis * this.opt.dis;//点与点触发连线的间距
+        this.dots = [];
+        //requestAnimationFrame控制canvas动画
+        var RAF = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function (callback) {
+            window.setTimeout(callback, 1000 / 60);
+        };
+        var _self = this;
+        //增加鼠标效果
+        var mousedot = {x: null, y: null, label: 'mouse'};
+        this.c.onmousemove = function (e) {
+            var e = e || window.event;
+            mousedot.x = e.clientX - _self.c.offsetLeft;
+            mousedot.y = e.clientY - _self.c.offsetTop;
+        };
+        this.c.onmouseout = function (e) {
+            mousedot.x = null;
+            mousedot.y = null;
+        };
+        //控制动画
+        this.animate = function () {
+            _self.ctx.clearRect(0, 0, _self.c.width, _self.c.height);
+            _self.drawLine([mousedot].concat(_self.dots));
+            RAF(_self.animate);
+        };
+    }
+
+    //合并配置项，es6直接使用obj.assign();
+    Dotline.prototype.extend = function (o, e) {
+        for (var key in e) {
+            if (e[key]) {
+                o[key] = e[key]
+            }
+        }
+        return o;
+    };
+    //画点
+    Dotline.prototype.addDots = function () {
+        var dot;
+        for (var i = 0; i < this.dotSum; i++) {//参数
+            dot = {
+                x: Math.floor(Math.random() * this.c.width) - this.radius,
+                y: Math.floor(Math.random() * this.c.height) - this.radius,
+                ax: (Math.random() * 2 - 1) / 1.5,
+                ay: (Math.random() * 2 - 1) / 1.5
+            }
+            this.dots.push(dot);
+        }
+    };
+    //点运动
+    Dotline.prototype.move = function (dot) {
+        dot.x += dot.ax;
+        dot.y += dot.ay;
+        //点碰到边缘返回
+        dot.ax *= (dot.x > (this.c.width - this.radius) || dot.x < this.radius) ? -1 : 1;
+        dot.ay *= (dot.y > (this.c.height - this.radius) || dot.y < this.radius) ? -1 : 1;
+        //绘制点
+        this.ctx.beginPath();
+        this.ctx.arc(dot.x, dot.y, this.radius, 0, Math.PI * 2, true);
+        this.ctx.stroke();
+    };
+    //点之间画线
+    Dotline.prototype.drawLine = function (dots) {
+        var nowDot;
+        var _that = this;
+        //自己的思路：遍历两次所有的点，比较点之间的距离，函数的触发放在animate里
+        this.dots.forEach(function (dot) {
+
+            _that.move(dot);
+            for (var j = 0; j < dots.length; j++) {
+                nowDot = dots[j];
+                if (nowDot === dot || nowDot.x === null || nowDot.y === null) continue;//continue跳出当前循环开始新的循环
+                var dx = dot.x - nowDot.x,//别的点坐标减当前点坐标
+                    dy = dot.y - nowDot.y;
+                var dc = dx * dx + dy * dy;
+                if (Math.sqrt(dc) > Math.sqrt(_that.disMax)) continue;
+                // 如果是鼠标，则让粒子向鼠标的位置移动
+                if (nowDot.label && Math.sqrt(dc) > Math.sqrt(_that.disMax) / 2) {
+                    dot.x -= dx * 0.02;
+                    dot.y -= dy * 0.02;
+                }
+                var ratio;
+                ratio = (_that.disMax - dc) / _that.disMax;
+
+                _that.ctx.beginPath();
+                _that.ctx.lineWidth = ratio / 2;
+                _that.ctx.strokeStyle = 'rgba(0,0,0,' + (ratio - 0.6) + ')';
+                _that.ctx.moveTo(dot.x, dot.y);
+                _that.ctx.lineTo(nowDot.x, nowDot.y);
+                _that.ctx.stroke();//不描边看不出效果
+
+                //dots.splice(dots.indexOf(dot), 1);
+            }
+        });
+    };
+    //开始动画
+    Dotline.prototype.start = function () {
+        var _that = this;
+        this.addDots();
+        setTimeout(function () {
+            _that.animate();
+        }, 100);
+    };
+    //调用
+    window.onload = function () {
+        if (window.innerWidth < 1980 && window.innerWidth > 800) {
+            var dotline = new Dotline({
+                dom: 'J_dotLine',//画布id
+                cw: window.innerWidth,//画布宽
+                ch: window.innerHeight,//画布高
+                ds: 200,//点的个数
+                r: 0.1,//圆点半径
+                dis: 200//触发连线的距离
+            }).start();
+        } else {
+            var dotline = new Dotline({
+                dom: 'J_dotLine',//画布id
+                cw: window.innerWidth,//画布宽
+                ch: window.innerHeight,//画布高
+                ds: 50,//点的个数
+                r: 0.1,//圆点半径
+                dis: 100//触发连线的距离
+            }).start();
+        }
+    }
+</script>
+
+<!--注册内容-->
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <div class="tab-content" id="myTab">
+                    <!--注册成功-->
+                    <div class="tab-pane fade in active" id="registerok">
+                        <div class="pro-bar">
+                            <span style="font-size: 1.4em;color: #000;">注册完成.....<label
+                                    style="font-style: italic;">100%</label></span>
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-success progress-bar-striped active"
+                                     role="progressbar"
+                                     aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                     style="width: 100%;">
+                                    <div class="progress-value">100%</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="col-md-1"></div>
+                                <div class="col-md-10 register-frame">
+                                    <div style="text-align: center;">
+                                        <span class="icon-user-check" style="font-size: 2.5em;"></span>
+                                        <br>
+                                        <label style="font-size: 1.6em;">注册成功，正在为你跳转.....<span>等待<b
+                                                id="wait">6</b>秒</span></label>
+                                        <br>
+                                        <label style="font-size: 1.3em;">自动跳转没成功？<a
+                                                href="/simplebilling/page/public/index.html">点这里</a></label>
+                                    </div>
+                                    <script type="text/javascript">
+                                        (function () {
+                                            var wait = document.getElementById('wait');
+                                            var interval = setInterval(function () {
+                                                var time = --wait.innerHTML;
+                                                if (time <= 0) {
+                                                    clearInterval(interval);
+                                                    location.href = "/simplebilling/page/public/index.html";
+                                                }
+                                                ;
+                                            }, 1000);
+                                        })();
+                                    </script>
+                                </div>
+                                <div class="col-md-1"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+    </div>
+
+</section>
+
+</body>
+</html>

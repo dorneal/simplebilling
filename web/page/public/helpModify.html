@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>记账帮助</title>
+    <link rel="shortcut icon" href="/simplebilling/img/icon/webIcon.ico">
+    <link rel="stylesheet" href="/simplebilling/css/bootstrap.css">
+    <link rel="stylesheet" href="/simplebilling/css/style.css">
+    <link rel="stylesheet" href="/simplebilling/css/private.css">
+    <link rel="stylesheet" href="/simplebilling/css/mystyle.css">
+    <link rel="stylesheet" href="/simplebilling/css/date.css">
+    <link rel="stylesheet" href="/simplebilling/css/load.css">
+    <script src="/simplebilling/js/jquery-3.2.1.js"></script>
+    <script src="/simplebilling/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/simplebilling/js/date.js"></script>
+</head>
+<body>
+<!--特殊背景-->
+<canvas id="J_dotLine" style="background-color: rgba(255,255,255,0);z-index: 0;position: fixed;"></canvas>
+<script>
+    function Dotline(option) {
+        this.opt = this.extend({
+            dom: 'J_dotLine',//画布id
+            cw: 1000,//画布宽
+            ch: 500,//画布高
+            ds: 100,//点的个数
+            r: 0.5,//圆点半径
+            dis: 100//触发连线的距离
+        }, option);
+        this.c = document.getElementById(this.opt.dom);//canvas元素id
+        this.ctx = this.c.getContext('2d');
+        this.c.width = this.opt.cw;//canvas宽
+        this.c.height = this.opt.ch;//canvas高
+        this.dotSum = this.opt.ds;//点的数量
+        this.radius = this.opt.r;//圆点的半径
+        this.disMax = this.opt.dis * this.opt.dis;//点与点触发连线的间距
+        this.dots = [];
+        //requestAnimationFrame控制canvas动画
+        var RAF = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function (callback) {
+            window.setTimeout(callback, 1000 / 60);
+        };
+        var _self = this;
+        //增加鼠标效果
+        var mousedot = {x: null, y: null, label: 'mouse'};
+        this.c.onmousemove = function (e) {
+            var e = e || window.event;
+            mousedot.x = e.clientX - _self.c.offsetLeft;
+            mousedot.y = e.clientY - _self.c.offsetTop;
+        };
+        this.c.onmouseout = function (e) {
+            mousedot.x = null;
+            mousedot.y = null;
+        }
+        //控制动画
+        this.animate = function () {
+            _self.ctx.clearRect(0, 0, _self.c.width, _self.c.height);
+            _self.drawLine([mousedot].concat(_self.dots));
+            RAF(_self.animate);
+        };
+    }
+
+    //合并配置项，es6直接使用obj.assign();
+    Dotline.prototype.extend = function (o, e) {
+        for (var key in e) {
+            if (e[key]) {
+                o[key] = e[key]
+            }
+        }
+        return o;
+    };
+    //画点
+    Dotline.prototype.addDots = function () {
+        var dot;
+        for (var i = 0; i < this.dotSum; i++) {//参数
+            dot = {
+                x: Math.floor(Math.random() * this.c.width) - this.radius,
+                y: Math.floor(Math.random() * this.c.height) - this.radius,
+                ax: (Math.random() * 2 - 1) / 1.5,
+                ay: (Math.random() * 2 - 1) / 1.5
+            }
+            this.dots.push(dot);
+        }
+    };
+    //点运动
+    Dotline.prototype.move = function (dot) {
+        dot.x += dot.ax;
+        dot.y += dot.ay;
+        //点碰到边缘返回
+        dot.ax *= (dot.x > (this.c.width - this.radius) || dot.x < this.radius) ? -1 : 1;
+        dot.ay *= (dot.y > (this.c.height - this.radius) || dot.y < this.radius) ? -1 : 1;
+        //绘制点
+        this.ctx.beginPath();
+        this.ctx.arc(dot.x, dot.y, this.radius, 0, Math.PI * 2, true);
+        this.ctx.stroke();
+    };
+    //点之间画线
+    Dotline.prototype.drawLine = function (dots) {
+        var nowDot;
+        var _that = this;
+        //自己的思路：遍历两次所有的点，比较点之间的距离，函数的触发放在animate里
+        this.dots.forEach(function (dot) {
+
+            _that.move(dot);
+            for (var j = 0; j < dots.length; j++) {
+                nowDot = dots[j];
+                if (nowDot === dot || nowDot.x === null || nowDot.y === null) continue;//continue跳出当前循环开始新的循环
+                var dx = dot.x - nowDot.x,//别的点坐标减当前点坐标
+                    dy = dot.y - nowDot.y;
+                var dc = dx * dx + dy * dy;
+                if (Math.sqrt(dc) > Math.sqrt(_that.disMax)) continue;
+                // 如果是鼠标，则让粒子向鼠标的位置移动
+                if (nowDot.label && Math.sqrt(dc) > Math.sqrt(_that.disMax) / 2) {
+                    dot.x -= dx * 0.02;
+                    dot.y -= dy * 0.02;
+                }
+                var ratio;
+                ratio = (_that.disMax - dc) / _that.disMax;
+
+                _that.ctx.beginPath();
+                _that.ctx.lineWidth = ratio / 2;
+                _that.ctx.strokeStyle = 'rgba(0,0,0,' + (ratio - 0.7) + ')';
+                _that.ctx.moveTo(dot.x, dot.y);
+                _that.ctx.lineTo(nowDot.x, nowDot.y);
+                _that.ctx.stroke();//不描边看不出效果
+
+                //dots.splice(dots.indexOf(dot), 1);
+            }
+        });
+    };
+    //开始动画
+    Dotline.prototype.start = function () {
+        var _that = this;
+        this.addDots();
+        setTimeout(function () {
+            _that.animate();
+        }, 100);
+    };
+    //调用
+    window.onload = function () {
+        if (window.innerWidth < 1980 && window.innerWidth > 800) {
+            var dotline = new Dotline({
+                dom: 'J_dotLine',//画布id
+                cw: window.innerWidth,//画布宽
+                ch: window.innerHeight,//画布高
+                ds: 200,//点的个数
+                r: 0.1,//圆点半径
+                dis: 200//触发连线的距离
+            }).start();
+        } else {
+            var dotline = new Dotline({
+                dom: 'J_dotLine',//画布id
+                cw: window.innerWidth,//画布宽
+                ch: window.innerHeight,//画布高
+                ds: 50,//点的个数
+                r: 0.1,//圆点半径
+                dis: 100//触发连线的距离
+            }).start();
+        }
+    }
+</script>
+
+<!--头部-->
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("ul#nav").find("li").each(function () {
+            var a = $(this).find("a:first")[0];
+            if ($(a).attr("href") === location.pathname) {
+                $(this).addClass("active");
+            } else {
+                $(this).removeClass("active");
+            }
+        });
+    });
+</script>
+<header id="header" class="">
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-default navbar-fixed-top nav-bgc" role="navigation">
+        <div class="container-fluid container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/simplebilling/page/public/index.html">Simple <span
+                        class="icon-coin-yen"></span> Billing</a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="/simplebilling/page/public/index.html">主页</a>
+                    </li>
+                    <li class="dropdown">
+                        <a href="/simplebilling/page/public/about.html" class="dropdown-toggle" data-toggle="dropdown">
+                            帮助 <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="#">Action</a>
+                            </li>
+                            <li>
+                                <a href="#">Another action</a>
+                            </li>
+                            <li>
+                                <a href="#">Something else here</a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="#">Separated link</a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="#">One more separated link</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="about.html">关于本站</a>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="registerStep1.html" style="font-size: 1.2em;"><span class="icon-clipboard"></span>
+                            注册</a>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" style="font-size: 1.2em;" data-toggle="modal" data-target="#myModal"><span
+                                class="icon-enter"></span> 登录</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </nav>
+</header><!-- /header -->
+
+<!-- 模态框（Modal） -->
+<div class="container">
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" style="text-align: center;">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×
+                    </button>
+                    <span class="modal-title" id="myModalLabel" style="font-size: 1.5em;font-family: 宋体,serif;">
+                        欢迎登录
+                    </span>
+                </div>
+                <div class="modal-body" style="padding-top: 10px;padding-bottom: 10px;">
+                    <div class="row">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-10">
+                            <div id="showInfo" class="alert alert-info alert-dismissable hide">
+                                <span></span>
+                                <button type="button" class="close" data-dismiss="alert"
+                                        aria-hidden="true">
+                                    &times;
+                                </button>
+                            </div>
+                            <div class="input-group" id="divInputName">
+                                <span class="input-group-addon icon-user icon-big-color"></span>
+                                <input id="username" type="text" class="form-control" placeholder="用户名" maxlength="10">
+                            </div>
+                            <br>
+                            <div class="input-group" id="divInputPassword">
+                                <span class="input-group-addon icon-key icon-big-color"></span>
+                                <input id="password" type="password" class="form-control" maxlength="6" minlength="6"
+                                       placeholder="密码">
+                            </div>
+                            <br>
+                            <div id="v_container"></div>
+                            <div class="input-group" style="padding: 0;margin: 0;">
+                                <input type="text" id="code_input" placeholder="请输入验证码" class="form-control"
+                                       maxlength="4" minlength="4">
+                                <span id="my_button" class="input-group-addon btn btn-default">验证</span>
+                            </div>
+                            <script src="/simplebilling/js/gVerify.js"></script>
+                            <!--输入后-->
+                            <script>
+                                var flag = false;
+                                var verifyCode = new GVerify("v_container");
+                                $("#my_button").click(verify());
+
+                                function login() {
+                                    //如果没点验证按钮，直接登录，则先进行验证
+                                    verify();
+                                    // 获取用户名
+                                    var username = $('input#username').val().trim();
+                                    // 获取密码
+                                    var password = $('input#password').val().trim();
+                                    if (password.length === 0) {
+                                        $('div#divInputPassword').addClass("has-error");
+                                    }
+                                    if (username.length === 0) {
+                                        $('div#divInputName').addClass("has-error");
+                                    } else {
+                                        $('div#divInputName').addClass("has-success");
+                                        $('div#divInputPassword').addClass("has-success");
+                                        var userJson = {"userName": username, "userPassword": password};
+                                        if (flag) {
+                                            $.ajax({
+                                                async: false,
+                                                type: "post",
+                                                url: "user/UserLoginServlet",
+                                                data: {"userJson": JSON.stringify(userJson)},
+                                                //设置为json,则返回的必须也要是json类型，不然就执行error
+                                                dataType: "text",
+                                                success: function (data) {
+                                                    if (data === 'SUCCESS') {
+                                                        // 跳转到用户查询servlet
+                                                        window.location.href = "user/ShowUser";
+                                                    } else {
+                                                        $('div#showInfo span').removeClass("hide").html("请检查您的网络！！！");
+                                                    }
+                                                },
+                                                error: function () {
+                                                    $('div#divInputPassword').addClass("has-error");
+                                                    $('div#showInfo span').removeClass("hide").html("密码错误！！！");
+                                                }
+                                            });
+                                        } else {
+                                            $('div#showInfo span').removeClass("hide").html("验证码错误！！！！");
+                                        }
+                                    }
+                                }
+
+                                function verify() {
+                                    var res = verifyCode.validate(document.getElementById("code_input").value);
+                                    if (res) {
+                                        flag = true;
+                                        $('div#showInfo span').removeClass("hide").html("验证成功");
+                                    } else {
+                                        var inputcode = document.getElementById("code_input");
+                                        inputcode.value = "";
+                                        $('div#showInfo span').removeClass("hide").html("验证码错误");
+                                    }
+                                }
+
+                                //判断是否敲击了Enter键
+                                $(document).keyup(function (event) {
+                                    if (event.keyCode === 13) {
+                                        $("input#login").trigger("click");
+                                    }
+                                });
+                            </script>
+                        </div>
+                        <div class="col-md-1"></div>
+                    </div>
+                </div>
+                <div style="width: 100%;">
+                    <input type="button" id="login" class="bg-success login-btn" onclick="login();" value="登录">
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<script>
+    $(function () {
+        if (window.innerWidth > 800 && window.innerWidth < 1980) {
+            $('#myModal').find('.modal-dialog').width(350);
+        }
+    });
+</script>
+
+<!--侧边栏(移动端不显示)-->
+<aside class="hidden-xs">
+    <div class="aside">
+        <ul>
+            <li><a href="" target="_blank"><span class="icon-github"></span></a></li>
+            <li><a href="" target="_blank"><span class="icon-linkedin"></span></a></li>
+            <li><a href="" target="_blank"><span class="icon-mail4"></span></a></li>
+            <li><a href="" target="_blank"><span class="icon-bubbles"></span></a></li>
+        </ul>
+    </div>
+</aside>
+
+<!--主显示界面-->
+<section>
+    <section id="main">
+        <section>
+            <div class="container">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            本周
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+</section>
+</body>
+</html>
