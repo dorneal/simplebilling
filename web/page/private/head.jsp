@@ -28,7 +28,7 @@
                             <li class="divider"></li>
                             <li><a href="#">上传备份</a></li>
                             <li class="divider"></li>
-                            <li><a href="user/UserQuitServlet">退出</a></li>
+                            <li><a href="${pageContext.request.contextPath}/user/UserQuitServlet">退出</a></li>
                         </ul>
                     </li>
                 </ul>

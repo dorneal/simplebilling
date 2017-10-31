@@ -303,16 +303,16 @@
                                             $('div#divInputPassword').addClass("has-success");
                                             var userJson = {"userName": username, "userPassword": password};
                                             $.ajax({
-                                                async: false,
-                                                type: "post",
-                                                url: "user/UserLoginServlet",
+                                                type: "POST",
+                                                url: "/simplebilling/user/UserLoginServlet",
+                                                cache: false,
                                                 data: {"userJson": JSON.stringify(userJson)},
                                                 //设置为json,则返回的必须也要是json类型，不然就执行error
                                                 dataType: "text",
                                                 success: function (data) {
                                                     if (data === 'SUCCESS') {
                                                         // 跳转到用户查询servlet
-                                                        window.location.href = "user/ShowUser";
+                                                        window.location.href = "/simplebilling/user/ShowUser";
                                                     } else {
                                                         $('div#divInputPassword').addClass("has-error");
                                                     }
