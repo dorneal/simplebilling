@@ -15,7 +15,7 @@
     </filter>
     <filter-mapping>
         <filter-name>ExistUserFilter</filter-name>
-        <url-pattern>/*</url-pattern>
+        <url-pattern>/page/private/*</url-pattern>
     </filter-mapping>
 
     <!--字符编码过滤器-->
