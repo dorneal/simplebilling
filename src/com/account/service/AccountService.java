@@ -1,7 +1,7 @@
 package com.account.service;
 
-
 import com.account.entity.AccountsEx;
+import com.account.entity.PageBean;
 
 import java.sql.Date;
 import java.sql.SQLException;
@@ -66,4 +66,38 @@ public interface AccountService {
      * @throws SQLException SQLException
      */
     void removeAccounts(int id) throws SQLException;
+
+    /**
+     * 查询本周的账目记录
+     *
+     * @return List
+     * @throws SQLException SQLException
+     */
+    List<AccountsEx> listWeekAccounts() throws SQLException;
+
+    /**
+     * 查询本月的账目记录
+     *
+     * @return List
+     * @throws SQLException SQLException
+     */
+    List<AccountsEx> listMonthAccounts() throws SQLException;
+
+    /**
+     * 查询所有的账目记录
+     *
+     * @return List
+     * @throws SQLException SQLException
+     */
+    List<AccountsEx> listAllAccounts() throws SQLException;
+
+    /**
+     * 分页查询显示记录
+     *
+     * @param id          用户ID
+     * @param currentPage 当前页
+     * @return PageBean对象
+     * @throws SQLException SQLException
+     */
+    PageBean<AccountsEx> pageListAccounts(int currentPage, int id) throws SQLException;
 }

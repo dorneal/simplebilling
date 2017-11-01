@@ -36,14 +36,15 @@ public class AccountDaoImpl implements AccountDao {
                 AccountsEx accountsEx = new AccountsEx();
                 accountsEx.setRecordId(resultSet.getInt(index++));
                 accountsEx.setBookId(resultSet.getInt(index++));
-                accountsEx.setRecordName(resultSet.getInt(index++));
-                accountsEx.setRecordType(resultSet.getInt(index++));
-                accountsEx.setRecordMode(resultSet.getInt(index++));
+                accountsEx.setRecordName(resultSet.getString(index++));
+                accountsEx.setRecordType(resultSet.getString(index++));
+                accountsEx.setRecordMode(resultSet.getString(index++));
                 accountsEx.setMoney(resultSet.getBigDecimal(index++));
                 accountsEx.setRecordDate(resultSet.getTimestamp(index++));
                 accountsEx.setRecordRemark(resultSet.getString(index));
                 accountsExList.add(accountsEx);
             }
+            resultSet.close();
         }
         return accountsExList;
     }
@@ -59,9 +60,9 @@ public class AccountDaoImpl implements AccountDao {
                 int index = 1;
                 accountsEx.setRecordId(resultSet.getInt(index++));
                 accountsEx.setBookId(resultSet.getInt(index++));
-                accountsEx.setRecordName(resultSet.getInt(index++));
-                accountsEx.setRecordType(resultSet.getInt(index++));
-                accountsEx.setRecordMode(resultSet.getInt(index++));
+                accountsEx.setRecordName(resultSet.getString(index++));
+                accountsEx.setRecordType(resultSet.getString(index++));
+                accountsEx.setRecordMode(resultSet.getString(index++));
                 accountsEx.setMoney(resultSet.getBigDecimal(index++));
                 accountsEx.setRecordDate(resultSet.getTimestamp(index++));
                 accountsEx.setRecordRemark(resultSet.getString(index));
@@ -90,9 +91,9 @@ public class AccountDaoImpl implements AccountDao {
                 AccountsEx accountsEx = new AccountsEx();
                 accountsEx.setRecordId(resultSet.getInt(index++));
                 accountsEx.setBookId(resultSet.getInt(index++));
-                accountsEx.setRecordName(resultSet.getInt(index++));
-                accountsEx.setRecordType(resultSet.getInt(index++));
-                accountsEx.setRecordMode(resultSet.getInt(index++));
+                accountsEx.setRecordName(resultSet.getString(index++));
+                accountsEx.setRecordType(resultSet.getString(index++));
+                accountsEx.setRecordMode(resultSet.getString(index++));
                 accountsEx.setMoney(resultSet.getBigDecimal(index++));
                 accountsEx.setRecordDate(resultSet.getTimestamp(index++));
                 accountsEx.setRecordRemark(resultSet.getString(index));
@@ -109,9 +110,9 @@ public class AccountDaoImpl implements AccountDao {
         try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
             int index = 1;
             preparedStatement.setInt(index++, accountsEx.getBookId());
-            preparedStatement.setInt(index++, accountsEx.getRecordName());
-            preparedStatement.setInt(index++, accountsEx.getRecordType());
-            preparedStatement.setInt(index++, accountsEx.getRecordMode());
+            preparedStatement.setString(index++, accountsEx.getRecordName());
+            preparedStatement.setString(index++, accountsEx.getRecordType());
+            preparedStatement.setString(index++, accountsEx.getRecordMode());
             preparedStatement.setBigDecimal(index++, accountsEx.getMoney());
             preparedStatement.setTimestamp(index++, accountsEx.getRecordDate());
             preparedStatement.setString(index, accountsEx.getRecordRemark());
@@ -126,9 +127,9 @@ public class AccountDaoImpl implements AccountDao {
         try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
             int index = 1;
             preparedStatement.setInt(index++, accountsEx.getBookId());
-            preparedStatement.setInt(index++, accountsEx.getRecordName());
-            preparedStatement.setInt(index++, accountsEx.getRecordType());
-            preparedStatement.setInt(index++, accountsEx.getRecordMode());
+            preparedStatement.setString(index++, accountsEx.getRecordName());
+            preparedStatement.setString(index++, accountsEx.getRecordType());
+            preparedStatement.setString(index++, accountsEx.getRecordMode());
             preparedStatement.setBigDecimal(index++, accountsEx.getMoney());
             preparedStatement.setTimestamp(index++, accountsEx.getRecordDate());
             preparedStatement.setString(index++, accountsEx.getRecordRemark());
@@ -146,5 +147,126 @@ public class AccountDaoImpl implements AccountDao {
             preparedStatement.execute();
             preparedStatement.close();
         }
+    }
+
+    @Override
+    public List<AccountsEx> listWeekAccounts(int id, Timestamp timestamp) throws SQLException {
+        String sql = "SELECT * FROM accounts WHERE Book_id IN (SELECT Book_id FROM rs_users_books WHERE User_id IN (SELECT User_id FROM users WHERE User_id= ?))AND YEARWEEK(date_format(?,'%Y-%m-%d'),1) = YEARWEEK(now());";
+        List<AccountsEx> accountsExList = new ArrayList<>();
+        try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+            preparedStatement.setInt(1, id);
+            preparedStatement.setTimestamp(2, timestamp);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                int index = 1;
+                AccountsEx accountsEx = new AccountsEx();
+                accountsEx.setRecordId(resultSet.getInt(index++));
+                accountsEx.setBookId(resultSet.getInt(index++));
+                accountsEx.setRecordName(resultSet.getString(index++));
+                accountsEx.setRecordType(resultSet.getString(index++));
+                accountsEx.setRecordMode(resultSet.getString(index++));
+                accountsEx.setMoney(resultSet.getBigDecimal(index++));
+                accountsEx.setRecordDate(resultSet.getTimestamp(index++));
+                accountsEx.setRecordRemark(resultSet.getString(index));
+                accountsExList.add(accountsEx);
+            }
+            resultSet.close();
+        }
+        return accountsExList;
+    }
+
+    @Override
+    public List<AccountsEx> listMonthAccounts(int id, Timestamp timestamp) throws SQLException {
+        String sql = "SELECT * FROM accounts WHERE Book_id IN (SELECT Book_id FROM rs_users_books WHERE User_id IN (SELECT User_id FROM users WHERE User_id= ?))AND YEARWEEK(date_format(?,'%Y-%m-%d'),1) = YEARWEEK(now());";
+        List<AccountsEx> accountsExList = new ArrayList<>();
+        try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+            preparedStatement.setInt(1, id);
+            preparedStatement.setTimestamp(2, timestamp);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                int index = 1;
+                AccountsEx accountsEx = new AccountsEx();
+                accountsEx.setRecordId(resultSet.getInt(index++));
+                accountsEx.setBookId(resultSet.getInt(index++));
+                accountsEx.setRecordName(resultSet.getString(index++));
+                accountsEx.setRecordType(resultSet.getString(index++));
+                accountsEx.setRecordMode(resultSet.getString(index++));
+                accountsEx.setMoney(resultSet.getBigDecimal(index++));
+                accountsEx.setRecordDate(resultSet.getTimestamp(index++));
+                accountsEx.setRecordRemark(resultSet.getString(index));
+                accountsExList.add(accountsEx);
+            }
+            resultSet.close();
+        }
+        return accountsExList;
+    }
+
+    @Override
+    public List<AccountsEx> listAllAccounts(int id, Timestamp timestamp) throws SQLException {
+        String sql = "SELECT * FROM accounts WHERE Book_id IN (SELECT Book_id FROM rs_users_books WHERE User_id IN (SELECT User_id FROM users WHERE User_id= ?))AND YEARWEEK(date_format(?,'%Y-%m-%d'),1) = YEARWEEK(now());";
+        List<AccountsEx> accountsExList = new ArrayList<>();
+        try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+            preparedStatement.setInt(1, id);
+            preparedStatement.setTimestamp(2, timestamp);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                int index = 1;
+                AccountsEx accountsEx = new AccountsEx();
+                accountsEx.setRecordId(resultSet.getInt(index++));
+                accountsEx.setBookId(resultSet.getInt(index++));
+                accountsEx.setRecordName(resultSet.getString(index++));
+                accountsEx.setRecordType(resultSet.getString(index++));
+                accountsEx.setRecordMode(resultSet.getString(index++));
+                accountsEx.setMoney(resultSet.getBigDecimal(index++));
+                accountsEx.setRecordDate(resultSet.getTimestamp(index++));
+                accountsEx.setRecordRemark(resultSet.getString(index));
+                accountsExList.add(accountsEx);
+            }
+            resultSet.close();
+        }
+        return accountsExList;
+    }
+
+    @Override
+    public int counts(int id) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM accounts WHERE Book_id IN (SELECT Book_id FROM rs_users_books WHERE User_id IN (SELECT User_id FROM users WHERE User_id= ?));";
+        int count;
+        try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            count = resultSet.getInt(1);
+            resultSet.close();
+        }
+        return count;
+    }
+
+    @Override
+    public List<AccountsEx> listLimitAccounts(int id, int startPage, int size) throws SQLException {
+        String sql = "\n" +
+                "SELECT * FROM accounts WHERE Book_id IN (SELECT Book_id FROM rs_users_books WHERE User_id IN (SELECT User_id FROM users WHERE User_id=?)) ORDER BY Record_date DESC LIMIT ?,?;";
+        List<AccountsEx> list = new ArrayList<>();
+        try (PreparedStatement parameterMetaData = conn.prepareStatement(sql)) {
+            int index2 = 1;
+            parameterMetaData.setInt(index2++, id);
+            parameterMetaData.setInt(index2++, startPage);
+            parameterMetaData.setInt(index2, size);
+            ResultSet resultSet = parameterMetaData.executeQuery();
+            while (resultSet.next()) {
+                int index = 1;
+                AccountsEx accountsEx = new AccountsEx();
+                accountsEx.setRecordId(resultSet.getInt(index++));
+                accountsEx.setBookId(resultSet.getInt(index++));
+                accountsEx.setRecordName(resultSet.getString(index++));
+                accountsEx.setRecordType(resultSet.getString(index++));
+                accountsEx.setRecordMode(resultSet.getString(index++));
+                accountsEx.setMoney(resultSet.getBigDecimal(index++));
+                accountsEx.setRecordDate(resultSet.getTimestamp(index++));
+                accountsEx.setRecordRemark(resultSet.getString(index));
+                list.add(accountsEx);
+            }
+            resultSet.close();
+        }
+        return list;
     }
 }

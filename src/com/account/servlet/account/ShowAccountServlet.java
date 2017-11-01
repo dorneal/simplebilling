@@ -1,6 +1,7 @@
-package com.account.servlet.user;
+package com.account.servlet.account;
 
 import com.account.entity.AccountsEx;
+import com.account.entity.PageBean;
 import com.account.entity.UsersEx;
 import com.account.service.AccountService;
 import com.account.service.impl.AccountServiceImpl;
@@ -11,25 +12,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.List;
 
 /**
- * 显示用户信息，以及简单账目信息
+ * 进入系统时查询显示所有账目记录并分页显示
  *
  * @author Neal
  */
-public class ShowUser extends HttpServlet {
+public class ShowAccountServlet extends HttpServlet {
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // 这里查值，放值
-        UsersEx user = (UsersEx) request.getSession().getAttribute("user");
         AccountService accountService = new AccountServiceImpl();
+        // 从session中取得ID数据
+        UsersEx usersEx = (UsersEx) request.getSession().getAttribute("user");
         try {
-            List<AccountsEx> listAccounts = accountService.listAccounts(user.getUserId());
-            if (listAccounts != null) {
-                request.setAttribute("listAccounts", listAccounts);
-            }
-            response.sendRedirect(request.getContextPath() + "/account/ShowAccountServlet");
+            // 查询封装
+            PageBean<AccountsEx> pageBean = accountService.pageListAccounts(1, usersEx.getUserId());
+            request.setAttribute("pageBean", pageBean);
+            request.getRequestDispatcher("/page/private/index.jsp").forward(request, response);
         } catch (SQLException e) {
             e.printStackTrace();
         }

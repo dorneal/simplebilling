@@ -22,16 +22,11 @@ import java.sql.Timestamp;
 public class UserRegisterServlet extends HttpServlet {
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
-        response.setCharacterEncoding("UTF-8");
-        response.setContentType("text/html;charset=utf-8");
         PrintWriter out = response.getWriter();
         String userRegisterJson = request.getParameter("userRegisterJson");
-        System.out.println("-----------------" + userRegisterJson);
         Gson gson = new Gson();
         UsersEx usersEx = gson.fromJson(userRegisterJson, UsersEx.class);
         usersEx.setRegisterDate(new Timestamp(System.currentTimeMillis()));
-        System.out.println("++++++++++++++++++" + usersEx.toString());
         UserService userService = new UserServiceImpl();
         try {
             boolean flag1 = userService.existEmail(usersEx);

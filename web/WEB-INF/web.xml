@@ -68,6 +68,47 @@
         <url-pattern>/user/UserRegisterServlet</url-pattern>
     </servlet-mapping>
 
+    <!--查询显示所有的记录制成图表显示-->
+    <servlet>
+        <servlet-name>AllAccountServlet</servlet-name>
+        <servlet-class>com.account.servlet.account.AllAccountServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AllAccountServlet</servlet-name>
+        <url-pattern>/account/AllAccountServlet</url-pattern>
+    </servlet-mapping>
+
+    <!--查询显示本周的记录制成图表显示-->
+    <servlet>
+        <servlet-name>WeekAccountServlet</servlet-name>
+        <servlet-class>com.account.servlet.account.WeekAccountServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>WeekAccountServlet</servlet-name>
+        <url-pattern>/account/WeekAccountServlet</url-pattern>
+    </servlet-mapping>
+
+    <!--查询显示本月份的记录制成图表显示-->
+    <servlet>
+        <servlet-name>MonthAccountServlet</servlet-name>
+        <servlet-class>com.account.servlet.account.MonthAccountServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MonthAccountServlet</servlet-name>
+        <url-pattern>/account/MonthAccountServlet</url-pattern>
+    </servlet-mapping>
+
+    <!--进入系统时查询显示所欲的记录分页显示-->
+    <servlet>
+        <servlet-name>ShowAccountServlet</servlet-name>
+        <servlet-class>com.account.servlet.account.ShowAccountServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ShowAccountServlet</servlet-name>
+        <url-pattern>/account/ShowAccountServlet</url-pattern>
+    </servlet-mapping>
+
+
     <!--统计在线人数Listener-->
     <listener>
         <listener-class>com.account.listener.OnlineNumberListener</listener-class>

@@ -21,10 +21,6 @@ import java.sql.SQLException;
 public class UserLoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // 设置编码
-        request.setCharacterEncoding("UTF-8");
-        response.setCharacterEncoding("UTF-8");
-        response.setContentType("text/html;charset=utf-8");
         PrintWriter out = response.getWriter();
         // 获取前端传来的json字符串
         String userJson = request.getParameter("userJson");

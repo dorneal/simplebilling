@@ -14,11 +14,11 @@ public class Accounts implements Serializable {
 
     private Integer bookId;
 
-    private Integer recordName;
+    private String recordName;
 
-    private Integer recordType;
+    private String recordType;
 
-    private Integer recordMode;
+    private String recordMode;
 
     private BigDecimal money;
 
@@ -42,27 +42,27 @@ public class Accounts implements Serializable {
         this.bookId = bookId;
     }
 
-    public Integer getRecordName() {
+    public String getRecordName() {
         return recordName;
     }
 
-    public void setRecordName(Integer recordName) {
+    public void setRecordName(String recordName) {
         this.recordName = recordName;
     }
 
-    public Integer getRecordType() {
+    public String getRecordType() {
         return recordType;
     }
 
-    public void setRecordType(Integer recordType) {
+    public void setRecordType(String recordType) {
         this.recordType = recordType;
     }
 
-    public Integer getRecordMode() {
+    public String getRecordMode() {
         return recordMode;
     }
 
-    public void setRecordMode(Integer recordMode) {
+    public void setRecordMode(String recordMode) {
         this.recordMode = recordMode;
     }
 

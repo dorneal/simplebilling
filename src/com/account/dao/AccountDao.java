@@ -4,6 +4,7 @@ import com.account.entity.AccountsEx;
 
 import java.sql.Date;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -65,4 +66,54 @@ public interface AccountDao {
      * @throws SQLException SQLException
      */
     void removeAccounts(int id) throws SQLException;
+
+    /**
+     * 查询本周的账目记录
+     *
+     * @param id        用户ID
+     * @param timestamp 日期
+     * @return List
+     * @throws SQLException SQLException
+     */
+    List<AccountsEx> listWeekAccounts(int id, Timestamp timestamp) throws SQLException;
+
+    /**
+     * 查询本月的账目记录
+     *
+     * @param id        用户ID
+     * @param timestamp 日期
+     * @return List
+     * @throws SQLException SQLException
+     */
+    List<AccountsEx> listMonthAccounts(int id, Timestamp timestamp) throws SQLException;
+
+    /**
+     * 查询所有的账目记录
+     *
+     * @param id        用户ID
+     * @param timestamp 日期
+     * @return List
+     * @throws SQLException SQLException
+     */
+    List<AccountsEx> listAllAccounts(int id, Timestamp timestamp) throws SQLException;
+
+    /**
+     * 查询该用户的总记录数
+     *
+     * @param id 用户ID
+     * @return 记录数
+     * @throws SQLException SQLException
+     */
+    int counts(int id) throws SQLException;
+
+    /**
+     * 分页查询
+     *
+     * @param id        用户ID
+     * @param startPage 起始页
+     * @param size      页大小
+     * @return List
+     * @throws SQLException SQLException
+     */
+    List<AccountsEx> listLimitAccounts(int id, int startPage, int size) throws SQLException;
 }

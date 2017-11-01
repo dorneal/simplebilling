@@ -22,9 +22,9 @@ public class ExportExcel<T> {
         AccountsEx accountsEx = new AccountsEx();
         accountsEx.setRecordRemark("测试数据");
         accountsEx.setRecordId(1);
-        accountsEx.setRecordType(1);
-        accountsEx.setRecordName(1);
-        accountsEx.setRecordMode(1);
+        accountsEx.setRecordType("1");
+        accountsEx.setRecordName("1");
+        accountsEx.setRecordMode("1");
         accountsEx.setMoney(BigDecimal.TEN);
         accountsEx.setBookId(1);
         accountsEx.setRecordDate(new Timestamp(System.currentTimeMillis()));
