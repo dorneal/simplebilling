@@ -258,7 +258,8 @@
                                              aria-labelledby="avatar-modal-label" role="dialog" tabindex="-1">
                                             <div class="modal-dialog modal-lg">
                                                 <div class="modal-content">
-                                                    <form class="avatar-form" action="user/UserRegisterServlet"
+                                                    <form class="avatar-form"
+                                                          action="/simplebilling/user/UserRegisterServlet"
                                                           enctype="multipart/form-data" method="post">
                                                         <div class="modal-header">
                                                             <button class="close" data-dismiss="modal" type="button">
@@ -377,9 +378,9 @@
                                             <div style="text-align: center;">
                                                 <a type="submit" href="index.html"
                                                    class="btn btn-default btn-success">主页</a>
-                                                <a type="submit" href="registerStep1.html"
+                                                <a href="registerStep1.html"
                                                    class="btn btn-default btn-success">↞</a>
-                                                <a type="submit" href="user/UserRegisterServlet"
+                                                <a id="goService" href="#"
                                                    class="btn btn-default btn-success">↠</a>
                                             </div>
                                         </form>
@@ -397,56 +398,101 @@
                         var phoneReg = /^1[3|4|5|8][0-9]\d{4,8}$/;
                         var emailReg = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
                         var passwordReg = /^\d{6}$/;
-
+                        var flag1 = false, flag2 = false, flag3 = false, flag4 = false, flag5 = false;
                         //验证
-                        $(document).ready(function () {
-                            $('input#input1').blur(function () {
-                                var userName = $('input#input1').val().trim();
-                                if (!nameReg.test(userName)) {
-                                    $('span.input1').html("请输入字母跟数字").css("color", "red");
+                        $(document).ready(
+                            function process() {
+                                $('input#input1').blur(function () {
+                                    var userName = $('input#input1').val().trim();
+                                    if (!nameReg.test(userName)) {
+                                        $('span.input1').html("请输入字母跟数字").css("color", "red");
+                                    } else {
+                                        flag1 = true;
+                                        $('span.input1').empty();
+                                        $('div.input-group:eq(0)').addClass("has-success");
+                                    }
+                                });
+                                $('input#input3').blur(function () {
+                                    var userPhoneNum = $('input#input3').val().trim();
+                                    if (!phoneReg.test(userPhoneNum)) {
+                                        $('span.input2').html("请输入正确的手机号码").css("color", "red");
+                                    } else {
+                                        flag2 = true;
+                                        $('span.input2').empty();
+                                        $('div.input-group:eq(2)').addClass("has-success");
+                                    }
+                                });
+                                $('input#input4').blur(function () {
+                                    var userEmail = $('input#input4').val().trim();
+                                    if (!emailReg.test(userEmail)) {
+                                        $('span.input3').html("请输入正确的邮箱").css("color", "red");
+                                    } else {
+                                        flag3 = true;
+                                        $('span.input3').empty();
+                                        $('div.input-group:eq(3)').addClass("has-success");
+                                    }
+                                });
+                                $('input#input5').blur(function () {
+                                    var userPassword = $('input#input5').val().trim();
+                                    if (!passwordReg.test(userPassword)) {
+                                        $('span.input4').html("请输入6位数密码").css("color", "red");
+                                    } else {
+                                        flag4 = true;
+                                        $('span.input4').empty();
+                                        $('div.input-group:eq(4)').addClass("has-success");
+                                    }
+                                });
+                                $('input#input6').blur(function () {
+                                    var userPassword = $('input#input5').val().trim();
+                                    var userPassword2 = $('input#input6').val().trim();
+                                    if (userPassword2 !== userPassword) {
+                                        $('span.input5').html("两次密码不一致").css("color", "red");
+                                    } else {
+                                        flag5 = true;
+                                        $('span.input5').empty();
+                                        $('div.input-group:eq(5)').addClass("has-success");
+                                    }
+                                });
+                            },
+                            $('a#goService').click(function () {
+                                if (flag1 && flag2 && flag3 && flag4 && flag5) {
+                                    var userRegisterJson = {
+                                        "userName": $('input#input1').val().trim(),
+                                        "userSex": $('select#input2  option:selected').text(),
+                                        "userPassword": $('input#input5').val().trim(),
+                                        "userPhonenum": $('input#input3').val().trim(),
+                                        "userSignature": $('textarea#input7').val().trim(),
+                                        "userEmail": $('input#input4').val().trim()
+                                    };
+                                    $.ajax({
+                                        url: "/simplebilling/user/UserRegisterServlet",
+                                        type: "post",
+                                        data: {"userRegisterJson": JSON.stringify(userRegisterJson)},
+                                        dataType: "text",
+                                        success: function (data) {
+                                            if (data === "existEmail") {
+                                                $('div.input-group:eq(3)').addClass("has-error");
+                                                $('span.input3').html("该邮箱已被注册！！！").css("color", "red");
+                                            }
+                                            if (data === "existUserName") {
+                                                $('div.input-group:eq(0)').addClass("has-error");
+                                                $('span.input1').html("该用户名已存在！！！").css("color", "red");
+                                            }
+                                            if (data === "existPhoneNum") {
+                                                $('div.input-group:eq(2)').addClass("has-error");
+                                                $('span.input2').html("该手机号码已被注册").css("color", "red");
+                                            }
+                                            if (data === "SUCCESS") {
+                                                window.location.href = "/simplebilling/page/public/registerStep3.html";
+                                            }
+                                        }
+                                    })
                                 } else {
-                                    $('span.input1').empty();
-                                    $('div.input-group:eq(0)').addClass("has-success");
+                                    alert("请正确填写");
+                                    process();
                                 }
-                            });
-                            $('input#input3').blur(function () {
-                                var userPhoneNum = $('input#input3').val().trim();
-                                if (!phoneReg.test(userPhoneNum)) {
-                                    $('span.input2').html("请输入正确的手机号码").css("color", "red");
-                                } else {
-                                    $('span.input2').empty();
-                                    $('div.input-group:eq(2)').addClass("has-success");
-                                }
-                            });
-                            $('input#input4').blur(function () {
-                                var userEmail = $('input#input4').val().trim();
-                                if (!emailReg.test(userEmail)) {
-                                    $('span.input3').html("请输入正确的邮箱").css("color", "red");
-                                } else {
-                                    $('span.input3').empty();
-                                    $('div.input-group:eq(3)').addClass("has-success");
-                                }
-                            });
-                            $('input#input5').blur(function () {
-                                var userPassword = $('input#input5').val().trim();
-                                if (!passwordReg.test(userPassword)) {
-                                    $('span.input4').html("请输入6位数密码").css("color", "red");
-                                } else {
-                                    $('span.input4').empty();
-                                    $('div.input-group:eq(4)').addClass("has-success");
-                                }
-                            });
-                            $('input#input6').blur(function () {
-                                var userPassword = $('input#input5').val().trim();
-                                var userPassword2 = $('input#input6').val().trim();
-                                if (userPassword2 !== userPassword) {
-                                    $('span.input5').html("两次密码不一致").css("color", "red");
-                                } else {
-                                    $('span.input5').empty();
-                                    $('div.input-group:eq(5)').addClass("has-success");
-                                }
-                            });
-                        });
+                            })
+                        );
                     </script>
                 </div>
             </div>
