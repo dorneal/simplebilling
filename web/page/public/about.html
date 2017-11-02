@@ -227,6 +227,129 @@
     </nav>
 </header><!-- /header -->
 
+<!-- 模态框（Modal） -->
+<div class="container">
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" style="text-align: center;">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×
+                    </button>
+                    <span class="modal-title" id="myModalLabel" style="font-size: 1.5em;font-family: 宋体,serif;">
+                        欢迎登录
+                    </span>
+                </div>
+                <div class="modal-body" style="padding-top: 10px;padding-bottom: 10px;">
+                    <div class="row">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-10">
+                            <div id="myAlert" class="alert alert-warning hide">
+                                <a href="#" class="close" data-dismiss="alert">&times;</a>
+                                <strong>警告！</strong>您的网络连接有问题。
+                            </div>
+                            <div class="input-group" id="divInputName">
+                                <span class="input-group-addon icon-user icon-big-color"></span>
+                                <input id="username" type="text" class="form-control" placeholder="用户名" maxlength="10">
+                            </div>
+                            <br>
+                            <div class="input-group" id="divInputPassword">
+                                <span class="input-group-addon icon-key icon-big-color"></span>
+                                <input id="password" type="password" class="form-control" maxlength="6" minlength="6"
+                                       placeholder="密码">
+                            </div>
+                            <br>
+                            <div id="v_container"></div>
+                            <div class="input-group" style="padding: 0;margin: 0;" id="divVerifyCode">
+                                <input type="text" id="code_input" placeholder="请输入验证码" class="form-control"
+                                       maxlength="4" minlength="4">
+                                <span id="my_button" class="input-group-addon btn btn-default">验证</span>
+                            </div>
+                            <script src="/simplebilling/js/gVerify.js"></script>
+                            <!--输入后-->
+                            <script>
+                                var flag = false;
+                                var verifyCode = new GVerify("v_container");
+                                $('span#my_button').click(function () {
+                                    var res = verifyCode.validate(document.getElementById("code_input").value);
+                                    if (res) {
+                                        flag = true;
+                                        if ($('div#divVerifyCode').hasClass('has-error')) {
+                                            $('div#divVerifyCode').removeClass('has-error');
+                                            $('div#divVerifyCode').addClass("has-success");
+                                        }
+                                        $('div#divVerifyCode').addClass("has-success");
+                                    } else {
+                                        var inputcode = document.getElementById("code_input");
+                                        inputcode.value = "";
+                                        $('div#divVerifyCode').addClass("has-error");
+                                    }
+                                });
+
+                                function login() {
+                                    // 获取用户名
+                                    var username = $('input#username').val().trim();
+                                    // 获取密码
+                                    var password = $('input#password').val().trim();
+                                    if (password.length === 0) {
+                                        $('div#divInputPassword').addClass("has-error");
+                                    }
+                                    if (username.length === 0) {
+                                        $('div#divInputName').addClass("has-error");
+                                    } else {
+                                        if (flag) {
+                                            $('div#divInputName').addClass("has-success");
+                                            $('div#divInputPassword').addClass("has-success");
+                                            var userJson = {"userName": username, "userPassword": password};
+                                            $.ajax({
+                                                type: "POST",
+                                                url: "/simplebilling/user/UserLoginServlet",
+                                                data: {"userJson": JSON.stringify(userJson)},
+                                                //设置为json,则返回的必须也要是json类型，不然就执行error
+                                                dataType: "text",
+                                                success: function (data) {
+                                                    if (data === 'SUCCESS') {
+                                                        // 跳转到用户查询servlet
+                                                        window.location.href = "/simplebilling/user/ShowUser";
+                                                    } else {
+                                                        $('div#divInputPassword').addClass("has-error");
+                                                    }
+                                                },
+                                                error: function () {
+                                                    $('div#myAlert').removeClass('hide');
+                                                }
+                                            });
+                                        } else {
+                                            $('div#divVerifyCode').addClass("has-error");
+                                        }
+                                    }
+                                }
+
+                                //判断是否敲击了Enter键
+                                $(document).keyup(function (event) {
+                                    if (event.keyCode === 13) {
+                                        $("input#login").trigger("click");
+                                    }
+                                });
+                            </script>
+                        </div>
+                        <div class="col-md-1"></div>
+                    </div>
+                </div>
+                <div style="width: 100%;">
+                    <input type="button" id="login" class="bg-success login-btn" onclick="login();" value="登录">
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<script>
+    $(function () {
+        if (window.innerWidth > 800 && window.innerWidth < 1980) {
+            $('#myModal').find('.modal-dialog').width(350);
+        }
+    });
+</script>
+
 <!--侧边栏(移动端不显示)-->
 <aside class="hidden-xs">
     <div class="aside">

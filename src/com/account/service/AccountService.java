@@ -30,7 +30,7 @@ public interface AccountService {
      * @return Accounts
      * @throws SQLException SQLException
      */
-    AccountsEx getAccounts(int id, Date date) throws SQLException;
+    AccountsEx getAccountsByDate(int id, Date date) throws SQLException;
 
     /**
      * 查询指定日期范围的记录
@@ -96,8 +96,19 @@ public interface AccountService {
      *
      * @param id          用户ID
      * @param currentPage 当前页
+     * @param pageSize    页面大小
      * @return PageBean对象
      * @throws SQLException SQLException
      */
-    PageBean<AccountsEx> pageListAccounts(int currentPage, int id) throws SQLException;
+    PageBean<AccountsEx> pageListAccounts(int currentPage, int id, int pageSize) throws SQLException;
+
+
+    /**
+     * 根据账目ID,获取单条账目
+     *
+     * @param id 账目ID
+     * @return AccountsEx
+     * @throws SQLException SQLException
+     */
+    AccountsEx getAccounts(int id) throws SQLException;
 }

@@ -246,12 +246,9 @@
                     <div class="row">
                         <div class="col-md-1"></div>
                         <div class="col-md-10">
-                            <div id="showInfo" class="alert alert-info alert-dismissable hide">
-                                <span></span>
-                                <button type="button" class="close" data-dismiss="alert"
-                                        aria-hidden="true">
-                                    &times;
-                                </button>
+                            <div id="myAlert" class="alert alert-warning hide">
+                                <a href="#" class="close" data-dismiss="alert">&times;</a>
+                                <strong>警告！</strong>您的网络连接有问题。
                             </div>
                             <div class="input-group" id="divInputName">
                                 <span class="input-group-addon icon-user icon-big-color"></span>
@@ -265,7 +262,7 @@
                             </div>
                             <br>
                             <div id="v_container"></div>
-                            <div class="input-group" style="padding: 0;margin: 0;">
+                            <div class="input-group" style="padding: 0;margin: 0;" id="divVerifyCode">
                                 <input type="text" id="code_input" placeholder="请输入验证码" class="form-control"
                                        maxlength="4" minlength="4">
                                 <span id="my_button" class="input-group-addon btn btn-default">验证</span>
@@ -275,11 +272,23 @@
                             <script>
                                 var flag = false;
                                 var verifyCode = new GVerify("v_container");
-                                $("#my_button").click(verify());
+                                $('span#my_button').click(function () {
+                                    var res = verifyCode.validate(document.getElementById("code_input").value);
+                                    if (res) {
+                                        flag = true;
+                                        if ($('div#divVerifyCode').hasClass('has-error')) {
+                                            $('div#divVerifyCode').removeClass('has-error');
+                                            $('div#divVerifyCode').addClass("has-success");
+                                        }
+                                        $('div#divVerifyCode').addClass("has-success");
+                                    } else {
+                                        var inputcode = document.getElementById("code_input");
+                                        inputcode.value = "";
+                                        $('div#divVerifyCode').addClass("has-error");
+                                    }
+                                });
 
                                 function login() {
-                                    //如果没点验证按钮，直接登录，则先进行验证
-                                    verify();
                                     // 获取用户名
                                     var username = $('input#username').val().trim();
                                     // 获取密码
@@ -290,45 +299,31 @@
                                     if (username.length === 0) {
                                         $('div#divInputName').addClass("has-error");
                                     } else {
-                                        $('div#divInputName').addClass("has-success");
-                                        $('div#divInputPassword').addClass("has-success");
-                                        var userJson = {"userName": username, "userPassword": password};
                                         if (flag) {
+                                            $('div#divInputName').addClass("has-success");
+                                            $('div#divInputPassword').addClass("has-success");
+                                            var userJson = {"userName": username, "userPassword": password};
                                             $.ajax({
-                                                async: false,
-                                                type: "post",
-                                                url: "user/UserLoginServlet",
+                                                type: "POST",
+                                                url: "/simplebilling/user/UserLoginServlet",
                                                 data: {"userJson": JSON.stringify(userJson)},
                                                 //设置为json,则返回的必须也要是json类型，不然就执行error
                                                 dataType: "text",
                                                 success: function (data) {
                                                     if (data === 'SUCCESS') {
                                                         // 跳转到用户查询servlet
-                                                        window.location.href = "user/ShowUser";
+                                                        window.location.href = "/simplebilling/user/ShowUser";
                                                     } else {
-                                                        $('div#showInfo span').removeClass("hide").html("请检查您的网络！！！");
+                                                        $('div#divInputPassword').addClass("has-error");
                                                     }
                                                 },
                                                 error: function () {
-                                                    $('div#divInputPassword').addClass("has-error");
-                                                    $('div#showInfo span').removeClass("hide").html("密码错误！！！");
+                                                    $('div#myAlert').removeClass('hide');
                                                 }
                                             });
                                         } else {
-                                            $('div#showInfo span').removeClass("hide").html("验证码错误！！！！");
+                                            $('div#divVerifyCode').addClass("has-error");
                                         }
-                                    }
-                                }
-
-                                function verify() {
-                                    var res = verifyCode.validate(document.getElementById("code_input").value);
-                                    if (res) {
-                                        flag = true;
-                                        $('div#showInfo span').removeClass("hide").html("验证成功");
-                                    } else {
-                                        var inputcode = document.getElementById("code_input");
-                                        inputcode.value = "";
-                                        $('div#showInfo span').removeClass("hide").html("验证码错误");
                                     }
                                 }
 

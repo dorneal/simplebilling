@@ -108,6 +108,45 @@
         <url-pattern>/account/ShowAccountServlet</url-pattern>
     </servlet-mapping>
 
+    <!--删除记录-->
+    <servlet>
+        <servlet-name>DeleteAccountServlet</servlet-name>
+        <servlet-class>com.account.servlet.account.DeleteAccountServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DeleteAccountServlet</servlet-name>
+        <url-pattern>/account/DeleteAccountServlet</url-pattern>
+    </servlet-mapping>
+
+    <!--添加账目-->
+    <servlet>
+        <servlet-name>InsertAccountServlet</servlet-name>
+        <servlet-class>com.account.servlet.account.InsertAccountServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>InsertAccountServlet</servlet-name>
+        <url-pattern>/account/InsertAccountServlet</url-pattern>
+    </servlet-mapping>
+
+    <!--跳转到修改页面-->
+    <servlet>
+        <servlet-name>ToUpdatePageServlet</servlet-name>
+        <servlet-class>com.account.servlet.account.ToUpdatePageServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ToUpdatePageServlet</servlet-name>
+        <url-pattern>/account/ToUpdatePageServlet</url-pattern>
+    </servlet-mapping>
+
+    <!--修改提交-->
+    <servlet>
+        <servlet-name>UpdateAccountServlet</servlet-name>
+        <servlet-class>com.account.servlet.account.UpdateAccountServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UpdateAccountServlet</servlet-name>
+        <url-pattern>/account/UpdateAccountServlet</url-pattern>
+    </servlet-mapping>
 
     <!--统计在线人数Listener-->
     <listener>

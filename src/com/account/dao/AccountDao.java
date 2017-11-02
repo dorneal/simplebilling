@@ -30,7 +30,7 @@ public interface AccountDao {
      * @return Accounts
      * @throws SQLException SQLException
      */
-    AccountsEx getAccounts(int id, Date date) throws SQLException;
+    AccountsEx getAccountsByDate(int id, Date date) throws SQLException;
 
     /**
      * 查询指定日期范围的记录
@@ -116,4 +116,13 @@ public interface AccountDao {
      * @throws SQLException SQLException
      */
     List<AccountsEx> listLimitAccounts(int id, int startPage, int size) throws SQLException;
+
+    /**
+     * 根据账目ID,获取单条账目
+     *
+     * @param id 账目ID
+     * @return AccountsEx
+     * @throws SQLException SQLException
+     */
+    AccountsEx getAccounts(int id) throws SQLException;
 }

@@ -17,7 +17,43 @@
     <script src="/simplebilling/js/echarts.min.js"></script>
 </head>
 <body>
-<jsp:include page="loading.jsp"/>
+<!--预加载动画-->
+<div class="animation">
+    <div class='loader loader4'>
+        <div>
+            <div>
+                <div>
+                    <div>
+                        <div>
+                            <div>
+                                <div>
+                                    <div>
+                                        <div>
+                                            <div></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.onreadystatechange = subSomething;//当页面加载状态改变的时候执行这个方法.
+    function subSomething() {
+        if (document.readyState === "Loaded") //当页面加载状态
+        {
+            $('div.animation').show();
+            $('section').hide();
+        } else {
+            $('section').show();
+            $('div.animation').hide();
+        }
+    }
+</script>
 <!--主显示界面-->
 <section>
     <jsp:include page="head.jsp"/>
@@ -37,7 +73,7 @@
                                     <table class="table">
                                         <thead>
                                         <tr>
-                                            <th>ID</th>
+                                            <%--<th>ID</th>--%>
                                             <th>记录名</th>
                                             <th>记录类型</th>
                                             <th>记录方式</th>
@@ -50,7 +86,7 @@
                                         <tbody>
                                         <c:forEach items="${requestScope.pageBean.lists}" var="account">
                                             <tr>
-                                                <td>${account.recordId}</td>
+                                                <td style="display: none;">${account.recordId}</td>
                                                 <td>${account.recordName}</td>
                                                 <td>${account.recordType}</td>
                                                 <td>${account.recordMode}</td>
@@ -58,8 +94,8 @@
                                                 <td>${account.recordDate}</td>
                                                 <td>${account.recordRemark}</td>
                                                 <td>
-                                                    <a href="">删除</a>
-                                                    <a href="">修改</a>
+                                                    <a href="javascript:if(confirm('确实要删除吗?'))location='${pageContext.request.contextPath}/account/DeleteAccountServlet?recordId=${account.recordId}'">删除</a>
+                                                    <a href="${pageContext.request.contextPath}/account/ToUpdatePageServlet?recordId=${account.recordId}">修改</a>
                                                 </td>
                                             </tr>
                                         </c:forEach>
@@ -76,6 +112,39 @@
                                         </tbody>
                                     </table>
                                 </div>
+                                <ul class="pagination" style="margin: 0 auto;">
+                                    <c:if test="${requestScope.pageBean.currPage==1}">
+                                        <li class="disabled"><a href="#">&laquo;</a></li>
+                                    </c:if>
+                                    <c:if test="${requestScope.pageBean.currPage!=1}">
+                                        <li><a href="${pageContext.request.contextPath}/account/ShowAccountServlet?currentPage=${requestScope.pageBean.currPage-1}&pageSize=${requestScope.pageBean.pageSize}">&laquo;</a></li>
+                                    </c:if>
+                                    <li class="active"><a name="currentPage" href="#">${requestScope.pageBean.currPage}</a></li>
+                                    <c:if test="${requestScope.pageBean.currPage>requestScope.pageBean.totalPage}">
+                                        <li class="disabled"><a href="#">&raquo;</a></li>
+                                    </c:if>
+                                    <c:if test="${requestScope.pageBean.currPage<=requestScope.pageBean.totalPage}">
+                                        <li><a href="${pageContext.request.contextPath}/account/ShowAccountServlet?currentPage=${requestScope.pageBean.currPage+1}&pageSize=${requestScope.pageBean.pageSize}">&raquo;</a></li>
+                                    </c:if>
+                                    <li>
+                                        &nbsp;&nbsp;页数
+                                        <select class="form-control" style="width: 65px;display: inline" onchange="location.href=this.value;">
+                                            <option style="display: none;">1</option>
+                                            <c:forEach var="lba" begin="1" end="${requestScope.pageBean.totalPage+1}" step="1">
+                                                <option value="${pageContext.request.contextPath}/account/ShowAccountServlet?currentPage=${lba}&pageSize=${requestScope.pageBean.pageSize}">${lba}</option>
+                                            </c:forEach>
+                                        </select>
+                                    </li>
+                                    <li>
+                                        &nbsp;&nbsp;页面大小
+                                        <select class="form-control" style="width: 65px;display: inline" name="pageSize" onchange="location.href=this.value;">
+                                            <option style="display: none;">10</option>
+                                            <option value="${pageContext.request.contextPath}/account/ShowAccountServlet?currentPage=${requestScope.pageBean.currPage}&pageSize=10">10</option>
+                                            <option value="${pageContext.request.contextPath}/account/ShowAccountServlet?currentPage=${requestScope.pageBean.currPage}&pageSize=20">20</option>
+                                            <option value="${pageContext.request.contextPath}/account/ShowAccountServlet?currentPage=${requestScope.pageBean.currPage}&pageSize=30">30</option>
+                                        </select>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                     </div>

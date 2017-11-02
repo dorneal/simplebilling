@@ -14,6 +14,12 @@
                 <a class="navbar-brand" href="#">Simple <span class="icon-coin-yen"></span> Billing
                     <span class="icon-menu4"></span></a>
             </div>
+            <form class="navbar-form navbar-left" role="search">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Search">
+                </div>
+                <button type="submit" class="btn btn-default">提交</button>
+            </form>
             <div class="collapse navbar-collapse navbar-right" id="example-navbar-collapse">
                 <ul class="nav navbar-nav">
                     <li class="active"><a href="#">${sessionScope.user.userName}</a></li>
@@ -42,13 +48,17 @@
                 <ul>
                     <li class="first-class-menu">
                         <ol>
-                            <li><a href="${pageContext.request.contextPath}/page/private/record.jsp"><h2><span
-                                    class="icon-calculator"></span> 记账</h2></a></li>
+                            <li class="second-class-menu"><h2><span class="icon-calculator"></span> 记账</h2>
+                                <ol>
+                                    <li class="third-class-menu"><a href="${pageContext.request.contextPath}/page/private/recordOut.jsp"><h3>支出</h3></a></li>
+                                    <li class="third-class-menu"><a href="${pageContext.request.contextPath}/page/private/recordIncome.jsp"><h3>收入</h3></a></li>
+                                </ol>
+                            </li>
                             <li class="second-class-menu"><h2><span class="icon-plus"></span> <span
                                     class="icon-equalizer"></span> 查询</h2>
                                 <ol>
                                     <li class="third-class-menu"><a
-                                            href="${pageContext.request.contextPath}/page/private/chartWeek.jsp.jsp">
+                                            href="${pageContext.request.contextPath}/page/private/chartWeek.jsp">
                                         <h3>本周</h3>
                                     </a></li>
                                     <li class="third-class-menu"><a
@@ -97,6 +107,9 @@
     function dynamicMenu(obj) {
         var firstmenu = $("." + obj + " .first-class-menu>h1");
         var secondmenu = $("." + obj + " .second-class-menu>h2");
+        if (firstmenu) {
+            firstmenu.next("ol").hide();
+        }
         if (secondmenu) {
             secondmenu.next("ol").hide();
         }

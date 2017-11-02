@@ -50,7 +50,7 @@ public class AccountDaoImpl implements AccountDao {
     }
 
     @Override
-    public AccountsEx getAccounts(int id, Date date) throws SQLException {
+    public AccountsEx getAccountsByDate(int id, Date date) throws SQLException {
         String sql = "SELECT * FROM accounts WHERE Book_id IN (SELECT Book_id FROM rs_users_books WHERE User_id IN (SELECT User_id FROM users WHERE User_id= ?)) AND Record_date=?;";
         AccountsEx accountsEx = new AccountsEx();
         try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
@@ -68,7 +68,6 @@ public class AccountDaoImpl implements AccountDao {
                 accountsEx.setRecordRemark(resultSet.getString(index));
             }
             resultSet.close();
-            preparedStatement.close();
         }
         if (accountsEx.getRecordId() != null) {
             return accountsEx;
@@ -106,7 +105,7 @@ public class AccountDaoImpl implements AccountDao {
 
     @Override
     public void saveAccounts(AccountsEx accountsEx) throws SQLException {
-        String sql = "insert into accounts VALUES (?,?,?,?,?,?,?);";
+        String sql = "insert into accounts(Book_id,Record_name,Record_type,Record_mode,money,Record_date,Record_remark) VALUES (?,?,?,?,?,?,?);";
         try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
             int index = 1;
             preparedStatement.setInt(index++, accountsEx.getBookId());
@@ -268,5 +267,31 @@ public class AccountDaoImpl implements AccountDao {
             resultSet.close();
         }
         return list;
+    }
+
+    @Override
+    public AccountsEx getAccounts(int id) throws SQLException {
+        String sql = "SELECT  * FROM accounts WHERE Record_id=?";
+        AccountsEx accountsEx = new AccountsEx();
+        try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                int index = 1;
+                accountsEx.setRecordId(resultSet.getInt(index++));
+                accountsEx.setBookId(resultSet.getInt(index++));
+                accountsEx.setRecordName(resultSet.getString(index++));
+                accountsEx.setRecordType(resultSet.getString(index++));
+                accountsEx.setRecordMode(resultSet.getString(index++));
+                accountsEx.setMoney(resultSet.getBigDecimal(index++));
+                accountsEx.setRecordDate(resultSet.getTimestamp(index++));
+                accountsEx.setRecordRemark(resultSet.getString(index));
+            }
+            resultSet.close();
+        }
+        if (accountsEx.getRecordId() != null) {
+            return accountsEx;
+        }
+        return null;
     }
 }

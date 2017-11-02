@@ -24,9 +24,24 @@ public class ShowAccountServlet extends HttpServlet {
         AccountService accountService = new AccountServiceImpl();
         // 从session中取得ID数据
         UsersEx usersEx = (UsersEx) request.getSession().getAttribute("user");
+        String currentPage = request.getParameter("currentPage");
+        String pageSize = request.getParameter("pageSize");
+        PageBean<AccountsEx> pageBean;
         try {
             // 查询封装
-            PageBean<AccountsEx> pageBean = accountService.pageListAccounts(1, usersEx.getUserId());
+            if (currentPage == null) {
+                if (pageSize == null) {
+                    pageBean = accountService.pageListAccounts(1, usersEx.getUserId(), 10);
+                } else {
+                    pageBean = accountService.pageListAccounts(1, usersEx.getUserId(), Integer.valueOf(pageSize));
+                }
+            } else {
+                if (pageSize == null) {
+                    pageBean = accountService.pageListAccounts(Integer.valueOf(currentPage), usersEx.getUserId(), 10);
+                } else {
+                    pageBean = accountService.pageListAccounts(Integer.valueOf(currentPage), usersEx.getUserId(), Integer.valueOf(pageSize));
+                }
+            }
             request.setAttribute("pageBean", pageBean);
             request.getRequestDispatcher("/page/private/index.jsp").forward(request, response);
         } catch (SQLException e) {

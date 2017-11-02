@@ -24,8 +24,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public AccountsEx getAccounts(int id, Date date) throws SQLException {
-        return accountDao.getAccounts(id, date);
+    public AccountsEx getAccountsByDate(int id, Date date) throws SQLException {
+        return accountDao.getAccountsByDate(id, date);
     }
 
     @Override
@@ -64,12 +64,11 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public PageBean<AccountsEx> pageListAccounts(int currentPage, int id) throws SQLException {
+    public PageBean<AccountsEx> pageListAccounts(int currentPage, int id, int pageSize) throws SQLException {
         PageBean<AccountsEx> pageBean = new PageBean<>();
         // 封装当前页
         pageBean.setCurrPage(currentPage);
         // 封装页面大小
-        int pageSize = 20;
         pageBean.setPageSize(pageSize);
         // 封装总记录数
         int totalCount = accountDao.counts(id);
@@ -81,5 +80,10 @@ public class AccountServiceImpl implements AccountService {
         List<AccountsEx> list = accountDao.listLimitAccounts(id, (currentPage - 1) * pageSize, pageSize);
         pageBean.setLists(list);
         return pageBean;
+    }
+
+    @Override
+    public AccountsEx getAccounts(int id) throws SQLException {
+        return accountDao.getAccounts(id);
     }
 }
