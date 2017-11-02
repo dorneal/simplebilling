@@ -14,13 +14,13 @@
                 <a class="navbar-brand" href="#">Simple <span class="icon-coin-yen"></span> Billing
                     <span class="icon-menu4"></span></a>
             </div>
-            <form class="navbar-form navbar-left" role="search">
-                <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Search">
-                </div>
-                <button type="submit" class="btn btn-default">提交</button>
-            </form>
             <div class="collapse navbar-collapse navbar-right" id="example-navbar-collapse">
+                <form class="navbar-form navbar-left" role="search">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search">
+                    </div>
+                    <button type="submit" class="btn btn-default">提交</button>
+                </form>
                 <ul class="nav navbar-nav">
                     <li class="active"><a href="#">${sessionScope.user.userName}</a></li>
                     <li><a href="#">上传</a></li>
@@ -48,10 +48,18 @@
                 <ul>
                     <li class="first-class-menu">
                         <ol>
-                            <li class="second-class-menu"><h2><span class="icon-calculator"></span> 记账</h2>
+                            <li class="second-class-menu">
+                                <a href="${pageContext.request.contextPath}/account/ShowAccountServlet"><h2> 我的账本</h2></a>
+                            </li>
+                            <li class="second-class-menu"><h2><span class="icon-plus"></span> <span
+                                    class="icon-calculator"></span> 记账</h2>
                                 <ol>
-                                    <li class="third-class-menu"><a href="${pageContext.request.contextPath}/page/private/recordOut.jsp"><h3>支出</h3></a></li>
-                                    <li class="third-class-menu"><a href="${pageContext.request.contextPath}/page/private/recordIncome.jsp"><h3>收入</h3></a></li>
+                                    <li class="third-class-menu"><a
+                                            href="${pageContext.request.contextPath}/page/private/recordOut.jsp"><h3>
+                                        支出</h3></a></li>
+                                    <li class="third-class-menu"><a
+                                            href="${pageContext.request.contextPath}/page/private/recordIncome.jsp"><h3>
+                                        收入</h3></a></li>
                                 </ol>
                             </li>
                             <li class="second-class-menu"><h2><span class="icon-plus"></span> <span

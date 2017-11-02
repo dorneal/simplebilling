@@ -37,6 +37,7 @@ public class UpdateAccountServlet extends HttpServlet {
         accountsEx.setRecordMode(recordMode);
         accountsEx.setRecordRemark(recordRemark);
         accountsEx.setMoney(new BigDecimal(money));
+        // 防止前端的日期跟后台的日期不同，做个转换
         SimpleDateFormat format = new SimpleDateFormat("yyyy:MM:dd HH:mm");
         try {
             format.parse(recordDate);

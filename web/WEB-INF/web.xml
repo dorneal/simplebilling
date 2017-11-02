@@ -17,6 +17,10 @@
         <filter-name>ExistUserFilter</filter-name>
         <url-pattern>/page/private/*</url-pattern>
     </filter-mapping>
+    <filter-mapping>
+        <filter-name>ExistUserFilter</filter-name>
+        <url-pattern>/account/ShowAccountServlet</url-pattern>
+    </filter-mapping>
 
     <!--字符编码过滤器-->
     <filter>
