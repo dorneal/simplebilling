@@ -29,7 +29,7 @@ public class DateJudgmentUtil {
      *
      * @param date 当前时间
      * @return 时间段
-     * @Exception Exception Exception
+     * @throws Exception Exception
      */
     public static int dayForWeek(Date date) throws Exception {
         Calendar c = Calendar.getInstance();
@@ -41,5 +41,16 @@ public class DateJudgmentUtil {
             dayForWeek = c.get(Calendar.DAY_OF_WEEK) - 1;
         }
         return dayForWeek - 1;
+    }
+
+    /**
+     * 返回一个到这个月1号的时间段
+     *
+     * @param date 当前时间
+     * @return int
+     * @throws Exception Exception
+     */
+    public static int dayForMonth(Date date) throws Exception {
+        return Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
     }
 }

@@ -96,9 +96,9 @@ public class AccountDaoImpl implements AccountDao {
                 accountsEx.setMoney(resultSet.getBigDecimal(index++));
                 accountsEx.setRecordDate(resultSet.getTimestamp(index++));
                 accountsEx.setRecordRemark(resultSet.getString(index));
+                accountsExList.add(accountsEx);
             }
             resultSet.close();
-            preparedStatement.close();
         }
         return accountsExList;
     }
@@ -116,7 +116,6 @@ public class AccountDaoImpl implements AccountDao {
             preparedStatement.setTimestamp(index++, accountsEx.getRecordDate());
             preparedStatement.setString(index, accountsEx.getRecordRemark());
             preparedStatement.execute();
-            preparedStatement.close();
         }
     }
 
@@ -134,7 +133,6 @@ public class AccountDaoImpl implements AccountDao {
             preparedStatement.setString(index++, accountsEx.getRecordRemark());
             preparedStatement.setInt(index, accountsEx.getRecordId());
             preparedStatement.execute();
-            preparedStatement.close();
         }
     }
 
@@ -144,7 +142,6 @@ public class AccountDaoImpl implements AccountDao {
         try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
             preparedStatement.setInt(1, id);
             preparedStatement.execute();
-            preparedStatement.close();
         }
     }
 

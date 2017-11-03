@@ -6,8 +6,6 @@ import com.account.service.AccountService;
 import com.account.service.impl.AccountServiceImpl;
 import com.account.util.DateJudgmentUtil;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -40,8 +38,10 @@ public class WeekAccountServlet extends HttpServlet {
                             sqlDate);
             System.out.println(accountsExList.size());
             Gson gson = new Gson();
-            String accountsJson = gson.toJson(accountsExList);
-            response.getWriter().write(accountsJson);
+            String weekAccountsJson = gson.toJson(accountsExList);
+            response.getWriter().write(weekAccountsJson);
+            response.getWriter().flush();
+            response.getWriter().close();
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -4,6 +4,7 @@ import com.account.entity.AccountsEx;
 import com.account.entity.UsersEx;
 import com.account.service.AccountService;
 import com.account.service.impl.AccountServiceImpl;
+import com.google.gson.Gson;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
@@ -36,10 +37,14 @@ public class CalendarTest {
                             1,
                             new java.sql.Date(DateJudgmentUtil.getPeriodOfWeek(DateJudgmentUtil.dayForWeek(sqlDate)).getTime()),
                             sqlDate);
-            System.out.println(accountsExList.size());
+            Gson gson = new Gson();
+            String accountsJson = gson.toJson(accountsExList);
+            System.out.println(accountsJson);
         } catch (Exception e) {
             e.printStackTrace();
         }
         System.out.println(calendar.getTime());
+        System.out.println("-------------------");
+        System.out.println(Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
     }
 }
