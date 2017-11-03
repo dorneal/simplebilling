@@ -49,21 +49,6 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public List<AccountsEx> listWeekAccounts() throws SQLException {
-        return null;
-    }
-
-    @Override
-    public List<AccountsEx> listMonthAccounts() throws SQLException {
-        return null;
-    }
-
-    @Override
-    public List<AccountsEx> listAllAccounts() throws SQLException {
-        return null;
-    }
-
-    @Override
     public PageBean<AccountsEx> pageListAccounts(int currentPage, int id, int pageSize) throws SQLException {
         PageBean<AccountsEx> pageBean = new PageBean<>();
         // 封装当前页

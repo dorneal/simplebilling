@@ -19,7 +19,7 @@
     </filter-mapping>
     <filter-mapping>
         <filter-name>ExistUserFilter</filter-name>
-        <url-pattern>/account/ShowAccountServlet</url-pattern>
+        <url-pattern>/account/*</url-pattern>
     </filter-mapping>
 
     <!--字符编码过滤器-->

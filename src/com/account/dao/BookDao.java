@@ -16,8 +16,7 @@ public interface BookDao {
      * 查询所有账本
      *
      * @return List
-     * @throws SQLException
-     * SQLException
+     * @throws SQLException SQLException
      */
     List<BooksEx> listBook() throws SQLException;
 }

@@ -27,7 +27,7 @@ public class AccountDaoImpl implements AccountDao {
     @Override
     public List<AccountsEx> listAccounts(int id) throws SQLException {
         List<AccountsEx> accountsExList = new ArrayList<>();
-        String sql = "SELECT * FROM accounts WHERE Book_id IN (SELECT Book_id FROM rs_users_books WHERE User_id IN (SELECT User_id FROM users WHERE User_id= ?));";
+        String sql = "SELECT a.* FROM accounts AS a LEFT JOIN rs_users_books AS r ON (a.Book_id = r.Book_id) WHERE r.User_id =?;";
         try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -51,7 +51,7 @@ public class AccountDaoImpl implements AccountDao {
 
     @Override
     public AccountsEx getAccountsByDate(int id, Date date) throws SQLException {
-        String sql = "SELECT * FROM accounts WHERE Book_id IN (SELECT Book_id FROM rs_users_books WHERE User_id IN (SELECT User_id FROM users WHERE User_id= ?)) AND Record_date=?;";
+        String sql = "SELECT a.* FROM accounts AS a LEFT JOIN rs_users_books AS r ON (a.Book_id = r.Book_id) WHERE r.User_id =? AND Record_date=?;";
         AccountsEx accountsEx = new AccountsEx();
         try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
             preparedStatement.setDate(1, date);
@@ -77,7 +77,7 @@ public class AccountDaoImpl implements AccountDao {
 
     @Override
     public List<AccountsEx> listAccountsByDate(int id, Date date, Date date2) throws SQLException {
-        String sql = "SELECT * FROM accounts WHERE Book_id IN (SELECT Book_id FROM rs_users_books WHERE User_id IN (SELECT User_id FROM users WHERE User_id=?)) AND Record_date BETWEEN (?,?);";
+        String sql = "SELECT a.* FROM accounts AS a LEFT JOIN rs_users_books AS r ON (a.Book_id = r.Book_id) WHERE r.User_id =? AND Record_date >= DATE_FORMAT(?,'%Y-%m-%d') AND Record_date <= DATE_FORMAT(?,'%Y-%m-%d');;";
         List<AccountsEx> accountsExList = new ArrayList<>();
         try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
             int index2 = 1;
@@ -148,87 +148,10 @@ public class AccountDaoImpl implements AccountDao {
         }
     }
 
-    @Override
-    public List<AccountsEx> listWeekAccounts(int id, Timestamp timestamp) throws SQLException {
-        String sql = "SELECT * FROM accounts WHERE Book_id IN (SELECT Book_id FROM rs_users_books WHERE User_id IN (SELECT User_id FROM users WHERE User_id= ?))AND YEARWEEK(date_format(?,'%Y-%m-%d'),1) = YEARWEEK(now());";
-        List<AccountsEx> accountsExList = new ArrayList<>();
-        try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
-            preparedStatement.setInt(1, id);
-            preparedStatement.setTimestamp(2, timestamp);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                int index = 1;
-                AccountsEx accountsEx = new AccountsEx();
-                accountsEx.setRecordId(resultSet.getInt(index++));
-                accountsEx.setBookId(resultSet.getInt(index++));
-                accountsEx.setRecordName(resultSet.getString(index++));
-                accountsEx.setRecordType(resultSet.getString(index++));
-                accountsEx.setRecordMode(resultSet.getString(index++));
-                accountsEx.setMoney(resultSet.getBigDecimal(index++));
-                accountsEx.setRecordDate(resultSet.getTimestamp(index++));
-                accountsEx.setRecordRemark(resultSet.getString(index));
-                accountsExList.add(accountsEx);
-            }
-            resultSet.close();
-        }
-        return accountsExList;
-    }
-
-    @Override
-    public List<AccountsEx> listMonthAccounts(int id, Timestamp timestamp) throws SQLException {
-        String sql = "SELECT * FROM accounts WHERE Book_id IN (SELECT Book_id FROM rs_users_books WHERE User_id IN (SELECT User_id FROM users WHERE User_id= ?))AND YEARWEEK(date_format(?,'%Y-%m-%d'),1) = YEARWEEK(now());";
-        List<AccountsEx> accountsExList = new ArrayList<>();
-        try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
-            preparedStatement.setInt(1, id);
-            preparedStatement.setTimestamp(2, timestamp);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                int index = 1;
-                AccountsEx accountsEx = new AccountsEx();
-                accountsEx.setRecordId(resultSet.getInt(index++));
-                accountsEx.setBookId(resultSet.getInt(index++));
-                accountsEx.setRecordName(resultSet.getString(index++));
-                accountsEx.setRecordType(resultSet.getString(index++));
-                accountsEx.setRecordMode(resultSet.getString(index++));
-                accountsEx.setMoney(resultSet.getBigDecimal(index++));
-                accountsEx.setRecordDate(resultSet.getTimestamp(index++));
-                accountsEx.setRecordRemark(resultSet.getString(index));
-                accountsExList.add(accountsEx);
-            }
-            resultSet.close();
-        }
-        return accountsExList;
-    }
-
-    @Override
-    public List<AccountsEx> listAllAccounts(int id, Timestamp timestamp) throws SQLException {
-        String sql = "SELECT * FROM accounts WHERE Book_id IN (SELECT Book_id FROM rs_users_books WHERE User_id IN (SELECT User_id FROM users WHERE User_id= ?))AND YEARWEEK(date_format(?,'%Y-%m-%d'),1) = YEARWEEK(now());";
-        List<AccountsEx> accountsExList = new ArrayList<>();
-        try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
-            preparedStatement.setInt(1, id);
-            preparedStatement.setTimestamp(2, timestamp);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                int index = 1;
-                AccountsEx accountsEx = new AccountsEx();
-                accountsEx.setRecordId(resultSet.getInt(index++));
-                accountsEx.setBookId(resultSet.getInt(index++));
-                accountsEx.setRecordName(resultSet.getString(index++));
-                accountsEx.setRecordType(resultSet.getString(index++));
-                accountsEx.setRecordMode(resultSet.getString(index++));
-                accountsEx.setMoney(resultSet.getBigDecimal(index++));
-                accountsEx.setRecordDate(resultSet.getTimestamp(index++));
-                accountsEx.setRecordRemark(resultSet.getString(index));
-                accountsExList.add(accountsEx);
-            }
-            resultSet.close();
-        }
-        return accountsExList;
-    }
 
     @Override
     public int counts(int id) throws SQLException {
-        String sql = "SELECT COUNT(*) FROM accounts WHERE Book_id IN (SELECT Book_id FROM rs_users_books WHERE User_id IN (SELECT User_id FROM users WHERE User_id= ?));";
+        String sql = "SELECT COUNT(Record_id) FROM accounts AS a LEFT JOIN rs_users_books AS r ON (a.Book_id = r.Book_id) WHERE r.User_id =?;";
         int count;
         try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
             preparedStatement.setInt(1, id);
@@ -242,8 +165,7 @@ public class AccountDaoImpl implements AccountDao {
 
     @Override
     public List<AccountsEx> listLimitAccounts(int id, int startPage, int size) throws SQLException {
-        String sql = "\n" +
-                "SELECT * FROM accounts WHERE Book_id IN (SELECT Book_id FROM rs_users_books WHERE User_id IN (SELECT User_id FROM users WHERE User_id=?)) ORDER BY Record_date DESC LIMIT ?,?;";
+        String sql = "SELECT a.* FROM accounts AS a LEFT JOIN rs_users_books AS r ON (a.Book_id = r.Book_id) WHERE r.User_id =? ORDER BY Record_date DESC LIMIT ?,?;";
         List<AccountsEx> list = new ArrayList<>();
         try (PreparedStatement parameterMetaData = conn.prepareStatement(sql)) {
             int index2 = 1;
@@ -271,7 +193,7 @@ public class AccountDaoImpl implements AccountDao {
 
     @Override
     public AccountsEx getAccounts(int id) throws SQLException {
-        String sql = "SELECT  * FROM accounts WHERE Record_id=?";
+        String sql = "SELECT * FROM accounts WHERE Record_id=?";
         AccountsEx accountsEx = new AccountsEx();
         try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
             preparedStatement.setInt(1, id);

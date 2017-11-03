@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="/simplebilling/css/date.css">
     <link rel="stylesheet" href="/simplebilling/css/load.css">
     <script src="/simplebilling/js/jquery-3.2.1.js"></script>
+    <script src="/simplebilling/js/echarts.min.js"></script>
     <script src="/simplebilling/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/simplebilling/js/date.js"></script>
 </head>
@@ -54,9 +55,12 @@
                                     // 指定图表的配置项和数据
                                     var option = {
                                         title: {
-                                            text: 'ECharts 入门示例'
+                                            text: 'ECharts 入门示例',
+                                            x:'center'
                                         },
-                                        tooltip: {},
+                                        tooltip: {
+                                            trigger:'item'
+                                        },
                                         legend: {
                                             orient: 'vertical',
                                             x: 'right',

@@ -60,7 +60,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void saveUser(UsersEx usersEx) throws SQLException {
-        String sql = "INSERT INTO users VALUES(?,?,?,?,?,?,?,?);";
+        String sql = "INSERT INTO users(User_name, User_Avatar, User_password, User_sex,User_phoneNum,User_signature, User_email,Register_date) VALUES(?,?,?,?,?,?,?,?);";
         try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
             int index = 1;
             preparedStatement.setString(index++, usersEx.getUserName());
@@ -106,7 +106,7 @@ public class UserDaoImpl implements UserDao {
             if (count < 1) {
                 return true;
             }
-            preparedStatement.close();
+            resultSet.close();
         }
         return false;
     }
@@ -122,7 +122,7 @@ public class UserDaoImpl implements UserDao {
             if (count < 1) {
                 return true;
             }
-            preparedStatement.close();
+            resultSet.close();
         }
         return false;
     }

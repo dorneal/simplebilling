@@ -5,10 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Simple Billing</title>
-    <link rel="stylesheet" href="/simplebilling/css/cntl.css">
     <link rel="shortcut icon" href="/simplebilling/img/icon/webIcon.ico">
     <link rel="stylesheet" href="/simplebilling/css/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="/simplebilling/css/myStyle.css">
+    <link rel="stylesheet" href="/simplebilling/css/cntl.css">
+    <link rel="stylesheet" href="/simplebilling/css/myStyle.css">
     <link rel="stylesheet" href="/simplebilling/css/style.css">
     <script src="/simplebilling/js/jquery-3.2.1.js"></script>
     <script src="/simplebilling/js/bootstrap.min.js"></script>
@@ -305,7 +305,7 @@
                                             $('div#divInputPassword').addClass("has-success");
                                             var userJson = {"userName": username, "userPassword": password};
                                             $.ajax({
-                                                type: "POST",
+                                                type: "post",
                                                 url: "/simplebilling/user/UserLoginServlet",
                                                 data: {"userJson": JSON.stringify(userJson)},
                                                 //设置为json,则返回的必须也要是json类型，不然就执行error
@@ -393,7 +393,7 @@
                                     "time_add": 1,
                                     "time_24h": true,
                                     "date_add": 3,
-                                    "date_add_color": "#000",
+                                    "date_add_color": "#000"
                                 };
 
                                 var c = document.getElementById('clock3_');

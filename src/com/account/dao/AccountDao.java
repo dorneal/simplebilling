@@ -66,36 +66,7 @@ public interface AccountDao {
      * @throws SQLException SQLException
      */
     void removeAccounts(int id) throws SQLException;
-
-    /**
-     * 查询本周的账目记录
-     *
-     * @param id        用户ID
-     * @param timestamp 日期
-     * @return List
-     * @throws SQLException SQLException
-     */
-    List<AccountsEx> listWeekAccounts(int id, Timestamp timestamp) throws SQLException;
-
-    /**
-     * 查询本月的账目记录
-     *
-     * @param id        用户ID
-     * @param timestamp 日期
-     * @return List
-     * @throws SQLException SQLException
-     */
-    List<AccountsEx> listMonthAccounts(int id, Timestamp timestamp) throws SQLException;
-
-    /**
-     * 查询所有的账目记录
-     *
-     * @param id        用户ID
-     * @param timestamp 日期
-     * @return List
-     * @throws SQLException SQLException
-     */
-    List<AccountsEx> listAllAccounts(int id, Timestamp timestamp) throws SQLException;
+    
 
     /**
      * 查询该用户的总记录数
