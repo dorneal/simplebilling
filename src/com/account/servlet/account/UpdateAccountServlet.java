@@ -11,9 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 /**
@@ -42,10 +42,10 @@ public class UpdateAccountServlet extends HttpServlet {
         accountsEx.setRecordRemark(recordRemark);
         accountsEx.setMoney(new BigDecimal(money));
         // 防止前端的日期跟后台的日期不同，做个转换
-        SimpleDateFormat format = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
-            format.parse(recordDate);
-            accountsEx.setRecordDate(Timestamp.valueOf(recordDate));
+            Date date = format.parse(recordDate);
+            accountsEx.setRecordDate(new Timestamp(date.getTime()));
         } catch (Exception e) {
             accountsEx.setRecordDate(Timestamp.valueOf(recordDate + ":00"));
         }

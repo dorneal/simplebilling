@@ -86,7 +86,8 @@
                                         <div class="input-group input-group-lg">
                                             <span class="icon-calculator input-group-addon"></span>
                                             <input name="money" id="cl2" type="text" class="form-control" dir="ltr"
-                                                   placeholder="请输入">
+                                                   placeholder="请输入"
+                                                   onkeyup="this.value=this.value.replace(/[^0-9]/g,'')">
                                         </div>
                                         <!--计算器面板-->
                                         <div id="calculator2">

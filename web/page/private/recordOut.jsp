@@ -86,7 +86,7 @@
                                         <div class="input-group input-group-lg">
                                             <span class="icon-calculator input-group-addon"></span>
                                             <input id="cl" type="text" class="form-control" dir="ltr"
-                                                   placeholder="请输入" name="money">
+                                                   placeholder="请输入" name="money" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')">
                                         </div>
                                         <!--计算器面板-->
                                         <div id="calculator">
@@ -157,6 +157,7 @@
                                                 <option value="食品酒水">食品酒水</option>
                                                 <option value="行车交通">行车交通</option>
                                                 <option value="人情往来">人情往来</option>
+                                                <option value="学习进修">学习进修</option>
                                                 <option value="衣服饰品">衣服饰品</option>
                                                 <option value="交流通讯">交流通讯</option>
                                                 <option value="医疗保健">医疗保健</option>

@@ -36,7 +36,6 @@ public class MonthAccountServlet extends HttpServlet {
                             usersEx.getUserId(),
                             new Date(DateJudgmentUtil.getPeriodOfWeek(DateJudgmentUtil.dayForMonth()).getTime()),
                             new Timestamp(System.currentTimeMillis()));
-            System.out.println(accountsExList.size());
             Gson gson = new Gson();
             String monthAccountsJson = gson.toJson(accountsExList);
             response.getWriter().write(monthAccountsJson);

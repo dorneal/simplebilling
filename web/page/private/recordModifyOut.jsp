@@ -89,7 +89,7 @@
                                         <div class="input-group input-group-lg">
                                             <span class="icon-calculator input-group-addon"></span>
                                             <input name="money" id="cl2" type="text" class="form-control" dir="ltr"
-                                                   placeholder="请输入" value="${requestScope.accountsEx.money}">
+                                                   placeholder="请输入" value="${requestScope.accountsEx.money}" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')">
                                         </div>
                                         <!--计算器面板-->
                                         <div id="calculator2">
@@ -158,7 +158,7 @@
                                         <div class="input-group input-group-lg">
                                             <span class="icon-tree input-group-addon"></span>
                                             <select class="form-control select-spend-category" name="recordType">
-                                                <option value="食物酒水">食物酒水</option>
+                                                <option value="食品酒水">食品酒水</option>
                                                 <option value="行车交通">行车交通</option>
                                                 <option value="人情往来">人情往来</option>
                                                 <option value="衣服饰品">衣服饰品</option>

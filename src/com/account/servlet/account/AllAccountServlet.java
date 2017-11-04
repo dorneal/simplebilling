@@ -35,7 +35,6 @@ public class AllAccountServlet extends HttpServlet {
                             usersEx.getUserId(),
                             new Date(date.getTime()),
                             new Timestamp(System.currentTimeMillis()));
-            System.out.println(accountsExList.size());
             Gson gson = new Gson();
             String allAccountsJson = gson.toJson(accountsExList);
             response.getWriter().write(allAccountsJson);
