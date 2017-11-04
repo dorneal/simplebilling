@@ -23,7 +23,18 @@
                 </form>
                 <ul class="nav navbar-nav">
                     <li class="active"><a href="#">${sessionScope.user.userName}</a></li>
-                    <li><a href="#">上传</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            下载导出 <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/simplebilling/account/ExportAccountByWeekServlet">本周账目</a></li>
+                            <li class="divider"></li>
+                            <li><a href="/simplebilling/account/ExportAccountByMonthServlet">本月账目</a></li>
+                            <li class="divider"></li>
+                            <li><a href="/simplebilling/account/ExportAccountByAllServlet">所有账目</a></li>
+                        </ul>
+                    </li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             More <b class="caret"></b>
@@ -49,7 +60,8 @@
                     <li class="first-class-menu">
                         <ol>
                             <li class="second-class-menu">
-                                <a href="${pageContext.request.contextPath}/account/ShowAccountServlet"><h2> 我的账本</h2></a>
+                                <a href="${pageContext.request.contextPath}/account/ShowAccountServlet"><h2> 我的账本</h2>
+                                </a>
                             </li>
                             <li class="second-class-menu"><h2><span class="icon-plus"></span> <span
                                     class="icon-calculator"></span> 记账</h2>

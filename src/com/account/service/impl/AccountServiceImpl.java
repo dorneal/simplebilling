@@ -6,9 +6,10 @@ import com.account.entity.AccountsEx;
 import com.account.entity.PageBean;
 import com.account.service.AccountService;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.SQLException;
-import java.util.List;
+import java.util.*;
 
 /**
  * 账目服务接口实现类
@@ -30,6 +31,24 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public List<AccountsEx> listAccountsByDate(int id, Date date, Date date2) throws SQLException {
+        List<AccountsEx> accountsExList = accountDao.listAccountsByDate(id, date, date2);
+        // 数据处理
+        for (int i = 0; i < accountsExList.size() - 1; i++) {
+            for (int j = accountsExList.size() - 1; j > i; j--) {
+                // 当有相同recordType-Key时，将money-key对应的Value相加，然后删除该k/v
+                if (accountsExList.get(j).getRecordType().hashCode() == accountsExList.get(i).getRecordType().hashCode()) {
+                    BigDecimal money1 = accountsExList.get(j).getMoney();
+                    BigDecimal money2 = accountsExList.get(i).getMoney();
+                    accountsExList.get(i).setMoney(money1.add(money2));
+                    accountsExList.remove(j);
+                }
+            }
+        }
+        return accountsExList;
+    }
+
+    @Override
+    public List<AccountsEx> listAccountsByDateOfExcel(int id, Date date, Date date2) throws SQLException {
         return accountDao.listAccountsByDate(id, date, date2);
     }
 

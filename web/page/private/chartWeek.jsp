@@ -18,12 +18,46 @@
     <script type="text/javascript" src="/simplebilling/js/date.js"></script>
 </head>
 <body>
-<jsp:include page="loading.jsp"/>
-
+<!--预加载动画-->
+<div class="animation">
+    <div class='loader loader4'>
+        <div>
+            <div>
+                <div>
+                    <div>
+                        <div>
+                            <div>
+                                <div>
+                                    <div>
+                                        <div>
+                                            <div></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.onreadystatechange = subSomething;//当页面加载状态改变的时候执行这个方法.
+    function subSomething() {
+        if (document.readyState === "Loaded") //当页面加载状态
+        {
+            $('div.animation').show();
+            $('section').hide();
+        } else {
+            $('section').show();
+            $('div.animation').hide();
+        }
+    }
+</script>
 <!--主显示界面-->
 <section>
     <jsp:include page="head.jsp"/>
-
     <section id="main">
         <section>
             <div class="container">
@@ -38,50 +72,6 @@
                             <div class="panel-body">
                                 <div id="eca1" style="margin:0 auto;"></div>
                                 <script src="/simplebilling/js/macarons.js"></script>
-                                <script>
-                                    var myBarChart = document.getElementById('eca1');
-                                    var resizeMyBarChartContainer = function () {
-                                        if (window.innerWidth < 800) {
-                                            myBarChart.style.width = window.innerWidth * .8 + 'px';
-                                            myBarChart.style.height = window.innerHeight / 2 + 'px';
-                                        } else {
-                                            myBarChart.style.width = window.innerWidth / 2 + 'px';
-                                            myBarChart.style.height = window.innerHeight / 2 + 'px';
-                                        }
-                                    };
-                                    resizeMyBarChartContainer();
-                                    // 第二个参数可以指定前面引入的主题
-                                    var chart = echarts.init(myBarChart, 'macarons');
-                                    // 指定图表的配置项和数据
-                                    var option = {
-                                        title: {
-                                            text: 'ECharts 入门示例',
-                                            x:'center'
-                                        },
-                                        tooltip: {
-                                            trigger:'item'
-                                        },
-                                        legend: {
-                                            orient: 'vertical',
-                                            x: 'right',
-                                            data: ['销量']
-                                        },
-                                        xAxis: {
-                                            data: ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"]
-                                        },
-                                        yAxis: {},
-                                        series: [{
-                                            name: '销量',
-                                            type: 'bar',
-                                            data: [5, 20, 36, 10, 10, 20]
-                                        }]
-                                    };
-                                    chart.setOption(option);
-                                    $(window).resize(function () {
-                                        resizeMyBarChartContainer();
-                                        chart.resize();
-                                    });
-                                </script>
                             </div>
                         </div>
                         <div class="panel panel-default">
@@ -93,7 +83,17 @@
                             <div class="panel-body">
                                 <div id="eca2" style="margin:0 auto;"></div>
                                 <script>
+                                    var myBarChart = document.getElementById('eca1');
                                     var myRadiusChar = document.getElementById('eca2');
+                                    var resizeMyBarChartContainer = function () {
+                                        if (window.innerWidth < 800) {
+                                            myBarChart.style.width = window.innerWidth * .8 + 'px';
+                                            myBarChart.style.height = window.innerHeight / 2 + 'px';
+                                        } else {
+                                            myBarChart.style.width = window.innerWidth / 2 + 'px';
+                                            myBarChart.style.height = window.innerHeight / 2 + 'px';
+                                        }
+                                    };
                                     var resizeMyRadiusChar = function () {
                                         if (window.innerWidth < 800) {
                                             myRadiusChar.style.width = window.innerWidth * .8 + 'px';
@@ -103,23 +103,47 @@
                                             myRadiusChar.style.height = window.innerHeight / 2 + 'px';
                                         }
                                     };
+                                    resizeMyBarChartContainer();
                                     resizeMyRadiusChar();
-                                    var chart = echarts.init(myRadiusChar);
-                                    // 指定图表的配置项和数据
+                                    // 第二个参数可以指定前面引入的主题
+                                    var chart = echarts.init(myBarChart, 'macarons');
+                                    var myChart = echarts.init(myRadiusChar, 'macarons');
+                                    // 设置加载动画
+                                    chart.showLoading();
+                                    myChart.showLoading();
+                                    // 初始 option
                                     chart.setOption({
+                                        title: {
+                                            text: '本周消费情况'
+                                        },
+                                        tooltip: {},
+                                        legend: {
+                                            data: ['支出']
+                                        },
+                                        xAxis: {
+                                            data: []
+                                        },
+                                        yAxis: {
+                                            type: 'value'
+                                        },
+                                        series: [{
+                                            name: '支出',
+                                            type: 'bar',
+                                            data: []
+                                        }]
+                                    });
+                                    // 指定图表的配置项和数据
+                                    myChart.setOption({
+                                        title: {
+                                            text: '本周收入情况'
+                                        },
                                         center: ['50%', '50%'],
                                         series: [
                                             {
                                                 name: '访问来源',
                                                 type: 'pie',
                                                 radius: '55%',
-                                                data: [
-                                                    {value: 235, name: '视频广告'},
-                                                    {value: 274, name: '联盟广告'},
-                                                    {value: 310, name: '邮件营销'},
-                                                    {value: 335, name: '直接访问'},
-                                                    {value: 400, name: '搜索引擎'}
-                                                ]
+                                                data: []
                                             }
                                         ],
                                         roseType: 'angle',
@@ -136,9 +160,61 @@
                                             }
                                         }
                                     });
+                                    // 异步加载、装填数据
+                                    $.ajax({
+                                        async: false,
+                                        type: 'post',
+                                        url: '/simplebilling/account/WeekAccountServlet',
+                                        dataType: 'json',
+                                        success: function (data) {
+                                            var nameArray = [], moneyArray = [];
+                                            var nameIncomeArray = [], moneyIncomeArray = [];
+                                            for (var i = 0; i < data.length; i++) {
+                                                if (data[i].recordName === "支出") {
+                                                    nameArray.push(data[i].recordType);
+                                                    moneyArray.push(data[i].money);
+                                                } else {
+                                                    nameIncomeArray.push(data[i].recordType);
+                                                    moneyIncomeArray.push(data[i].money);
+                                                }
+                                            }
+                                            chart.hideLoading();
+                                            chart.setOption({
+                                                xAxis: [{
+                                                    data: nameArray
+                                                }],
+                                                series: [{
+                                                    name: '支出',
+                                                    type: 'bar',
+                                                    data: moneyArray
+                                                }]
+                                            });
+                                            myChart.hideLoading();
+                                            myChart.setOption({
+                                                series: [
+                                                    {
+                                                        name: '访问来源',
+                                                        type: 'pie',
+                                                        radius: '55%',
+                                                        data: [{name: nameIncomeArray[0], value: moneyIncomeArray[0]},
+                                                            {name: nameIncomeArray[1], value: moneyIncomeArray[1]},
+
+                                                            {name: nameIncomeArray[3], value: moneyIncomeArray[3]}]
+                                                    }
+                                                ]
+                                            })
+                                        },
+                                        error: function () {
+                                            console.log('error');
+                                        }
+                                    });
+                                    $(window).resize(function () {
+                                        resizeMyBarChartContainer();
+                                        chart.resize();
+                                    });
                                     $(window).resize(function () {
                                         resizeMyRadiusChar();
-                                        chart.resize();
+                                        myChart.resize();
                                     });
                                 </script>
                             </div>

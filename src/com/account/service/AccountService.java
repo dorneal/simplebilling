@@ -34,7 +34,7 @@ public interface AccountService {
     AccountsEx getAccountsByDate(int id, Date date) throws SQLException;
 
     /**
-     * 查询指定日期范围的记录
+     * 查询指定日期范围的记录,用于图表显示
      *
      * @param id    用户ID
      * @param date  日期端1
@@ -43,6 +43,17 @@ public interface AccountService {
      * @throws SQLException SQLException
      */
     List<AccountsEx> listAccountsByDate(int id, Date date, Date date2) throws SQLException;
+
+    /**
+     * 查询指定日期范围的记录
+     *
+     * @param id    用户ID
+     * @param date  日期端1
+     * @param date2 日期端2
+     * @return List
+     * @throws SQLException SQLException
+     */
+    List<AccountsEx> listAccountsByDateOfExcel(int id, Date date, Date date2) throws SQLException;
 
     /**
      * 插入一条账目

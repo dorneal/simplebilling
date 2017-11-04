@@ -3,6 +3,7 @@ package com.account.entity;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.Objects;
 
 /**
  * 账目实体类
@@ -102,5 +103,29 @@ public class Accounts implements Serializable {
                 ", recordDate=" + recordDate +
                 ", recordRemark='" + recordRemark + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Accounts)) {
+            return false;
+        }
+        Accounts accounts = (Accounts) o;
+        return Objects.equals(getRecordId(), accounts.getRecordId()) &&
+                Objects.equals(getBookId(), accounts.getBookId()) &&
+                Objects.equals(getRecordName(), accounts.getRecordName()) &&
+                Objects.equals(getRecordType(), accounts.getRecordType()) &&
+                Objects.equals(getRecordMode(), accounts.getRecordMode()) &&
+                Objects.equals(getMoney(), accounts.getMoney()) &&
+                Objects.equals(getRecordDate(), accounts.getRecordDate()) &&
+                Objects.equals(getRecordRemark(), accounts.getRecordRemark());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getRecordId(), getBookId(), getRecordName(), getRecordType(), getRecordMode(), getMoney(), getRecordDate(), getRecordRemark());
     }
 }

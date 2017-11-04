@@ -152,10 +152,41 @@
         <url-pattern>/account/UpdateAccountServlet</url-pattern>
     </servlet-mapping>
 
+    <!--本周账目EXCEL导出-->
+    <servlet>
+        <servlet-name>ExportAccountByWeekServlet</servlet-name>
+        <servlet-class>com.account.servlet.account.ExportAccountByWeekServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ExportAccountByWeekServlet</servlet-name>
+        <url-pattern>/account/ExportAccountByWeekServlet</url-pattern>
+    </servlet-mapping>
+
+    <!--本月账目EXCEL导出-->
+    <servlet>
+        <servlet-name>ExportAccountByMonthServlet</servlet-name>
+        <servlet-class>com.account.servlet.account.ExportAccountByMonthServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ExportAccountByMonthServlet</servlet-name>
+        <url-pattern>/account/ExportAccountByMonthServlet</url-pattern>
+    </servlet-mapping>
+
+    <!--所有账目EXCEL导出-->
+    <servlet>
+        <servlet-name>ExportAccountByAllServlet</servlet-name>
+        <servlet-class>com.account.servlet.account.ExportAccountByAllServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ExportAccountByAllServlet</servlet-name>
+        <url-pattern>/account/ExportAccountByAllServlet</url-pattern>
+    </servlet-mapping>
+
     <!--统计在线人数Listener-->
     <listener>
         <listener-class>com.account.listener.OnlineNumberListener</listener-class>
     </listener>
+
     <error-page>
         <error-code>404</error-code>
         <location>/page/public/error.html</location>
