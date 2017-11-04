@@ -10,6 +10,8 @@ import java.util.Properties;
 
 /**
  * 使用连接池技术管理数据库连接
+ *
+ * @author Neal
  */
 public class DBPoolUtil {
 
@@ -52,14 +54,6 @@ public class DBPoolUtil {
                             prop.getProperty("jdbc.maxActive")
                     )
             );
-//            dbcp.setMinEvictableIdleTimeMillis(Long.parseLong("jdbc.minEvictableIdleTimeMillis"));
-//            dbcp.setTestOnBorrow(Boolean.parseBoolean("jdbc.testOnBorrow"));
-//            dbcp.setTestWhileIdle(Boolean.parseBoolean("jdbc.testWhileIdle"));
-//            dbcp.setTimeBetweenEvictionRunsMillis(Long.parseLong("jdbc.timeBetweenEvictionRunsMillis"));
-//            dbcp.setNumTestsPerEvictionRun(Integer.parseInt("jdbc.numTestsPerEvictionRun"));
-//            dbcp.setRemoveAbandonedOnBorrow(Boolean.parseBoolean("jdbc.removeAbandoned"));
-//            dbcp.setRemoveAbandonedTimeout(Integer.parseInt("jdbc.removeAbandonedTimeout"));
-            //设置最大等待时间
             dbcp.setMaxWaitMillis(
                     Integer.parseInt(
                             prop.getProperty("jdbc.maxWait")

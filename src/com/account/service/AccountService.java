@@ -42,7 +42,7 @@ public interface AccountService {
      * @return List
      * @throws SQLException SQLException
      */
-    List<AccountsEx> listAccountsByDate(int id, Date date, Date date2) throws SQLException;
+    List<AccountsEx> listAccountsByDate(int id, Date date, Timestamp date2) throws SQLException;
 
     /**
      * 查询指定日期范围的记录
@@ -53,7 +53,7 @@ public interface AccountService {
      * @return List
      * @throws SQLException SQLException
      */
-    List<AccountsEx> listAccountsByDateOfExcel(int id, Date date, Date date2) throws SQLException;
+    List<AccountsEx> listAccountsByDateOfExcel(int id, Date date, Timestamp date2) throws SQLException;
 
     /**
      * 插入一条账目

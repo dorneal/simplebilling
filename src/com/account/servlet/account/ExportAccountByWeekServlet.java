@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.sql.Date;
+import java.sql.Timestamp;
 
 /**
  * 将本周账目导出Excel
@@ -27,7 +28,7 @@ public class ExportAccountByWeekServlet extends HttpServlet {
             // 调用Excel工具类导出方法
             HSSFWorkbook wb = ExportExcel.export(usersEx.getUserId(),
                     new Date(DateJudgmentUtil.getPeriodOfWeek(DateJudgmentUtil.dayForWeek(sqlDate)).getTime()),
-                    sqlDate, "本周账本");
+                    new Timestamp(System.currentTimeMillis()), "本周账本");
             response.setContentType("application/vnd.ms-excel");
             response.setHeader("Content-disposition", "attachment;filename=myAccountOfWeek.xls");
             OutputStream ouputStream = response.getOutputStream();

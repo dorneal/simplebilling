@@ -27,7 +27,7 @@ public class AccountDaoImpl implements AccountDao {
     @Override
     public List<AccountsEx> listAccounts(int id) throws SQLException {
         List<AccountsEx> accountsExList = new ArrayList<>();
-        String sql = "SELECT a.* FROM accounts AS a LEFT JOIN rs_users_books AS r ON (a.Book_id = r.Book_id) WHERE r.User_id =?;";
+        String sql = "SELECT * from accounts WHERE User_id=?;";
         try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -35,7 +35,7 @@ public class AccountDaoImpl implements AccountDao {
                 int index = 1;
                 AccountsEx accountsEx = new AccountsEx();
                 accountsEx.setRecordId(resultSet.getInt(index++));
-                accountsEx.setBookId(resultSet.getInt(index++));
+                accountsEx.setUserId(resultSet.getInt(index++));
                 accountsEx.setRecordName(resultSet.getString(index++));
                 accountsEx.setRecordType(resultSet.getString(index++));
                 accountsEx.setRecordMode(resultSet.getString(index++));
@@ -51,15 +51,16 @@ public class AccountDaoImpl implements AccountDao {
 
     @Override
     public AccountsEx getAccountsByDate(int id, Date date) throws SQLException {
-        String sql = "SELECT a.* FROM accounts AS a LEFT JOIN rs_users_books AS r ON (a.Book_id = r.Book_id) WHERE r.User_id =? AND Record_date=?;";
+        String sql = "SELECT * from accounts WHERE User_id=? AND Record_date=?;";
         AccountsEx accountsEx = new AccountsEx();
         try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
-            preparedStatement.setDate(1, date);
+            preparedStatement.setInt(1, id);
+            preparedStatement.setDate(2, date);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 int index = 1;
                 accountsEx.setRecordId(resultSet.getInt(index++));
-                accountsEx.setBookId(resultSet.getInt(index++));
+                accountsEx.setUserId(resultSet.getInt(index++));
                 accountsEx.setRecordName(resultSet.getString(index++));
                 accountsEx.setRecordType(resultSet.getString(index++));
                 accountsEx.setRecordMode(resultSet.getString(index++));
@@ -76,20 +77,20 @@ public class AccountDaoImpl implements AccountDao {
     }
 
     @Override
-    public List<AccountsEx> listAccountsByDate(int id, Date date, Date date2) throws SQLException {
-        String sql = "SELECT a.* FROM accounts AS a LEFT JOIN rs_users_books AS r ON (a.Book_id = r.Book_id) WHERE r.User_id =? AND Record_date >= DATE_FORMAT(?,'%Y-%m-%d') AND Record_date <= DATE_FORMAT(?,'%Y-%m-%d');;";
+    public List<AccountsEx> listAccountsByDate(int id, Date date, Timestamp date2) throws SQLException {
+        String sql = "SELECT * from accounts WHERE User_id=? AND Record_date >= DATE_FORMAT(?,'%Y-%m-%d ') AND Record_date <= DATE_FORMAT(?,'%Y-%m-%d %H:%i:%S');";
         List<AccountsEx> accountsExList = new ArrayList<>();
         try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
             int index2 = 1;
             preparedStatement.setInt(index2++, id);
             preparedStatement.setDate(index2++, date);
-            preparedStatement.setDate(index2, date2);
+            preparedStatement.setTimestamp(index2, date2);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 int index = 1;
                 AccountsEx accountsEx = new AccountsEx();
                 accountsEx.setRecordId(resultSet.getInt(index++));
-                accountsEx.setBookId(resultSet.getInt(index++));
+                accountsEx.setUserId(resultSet.getInt(index++));
                 accountsEx.setRecordName(resultSet.getString(index++));
                 accountsEx.setRecordType(resultSet.getString(index++));
                 accountsEx.setRecordMode(resultSet.getString(index++));
@@ -105,10 +106,10 @@ public class AccountDaoImpl implements AccountDao {
 
     @Override
     public void saveAccounts(AccountsEx accountsEx) throws SQLException {
-        String sql = "insert into accounts(Book_id,Record_name,Record_type,Record_mode,money,Record_date,Record_remark) VALUES (?,?,?,?,?,?,?);";
+        String sql = "insert into accounts(User_id,Record_name,Record_type,Record_mode,money,Record_date,Record_remark) VALUES (?,?,?,?,?,?,?);";
         try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
             int index = 1;
-            preparedStatement.setInt(index++, accountsEx.getBookId());
+            preparedStatement.setInt(index++, accountsEx.getUserId());
             preparedStatement.setString(index++, accountsEx.getRecordName());
             preparedStatement.setString(index++, accountsEx.getRecordType());
             preparedStatement.setString(index++, accountsEx.getRecordMode());
@@ -121,10 +122,10 @@ public class AccountDaoImpl implements AccountDao {
 
     @Override
     public void updateAccounts(AccountsEx accountsEx) throws SQLException {
-        String sql = "update accounts SET Book_id=?,Record_name=?,Record_type=?,Record_mode=?,money=?,Record_date=?,Record_remark=? WHERE Record_id=?;";
+        String sql = "update accounts SET User_id=?,Record_name=?,Record_type=?,Record_mode=?,money=?,Record_date=?,Record_remark=? WHERE Record_id=?;";
         try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
             int index = 1;
-            preparedStatement.setInt(index++, accountsEx.getBookId());
+            preparedStatement.setInt(index++, accountsEx.getUserId());
             preparedStatement.setString(index++, accountsEx.getRecordName());
             preparedStatement.setString(index++, accountsEx.getRecordType());
             preparedStatement.setString(index++, accountsEx.getRecordMode());
@@ -148,7 +149,7 @@ public class AccountDaoImpl implements AccountDao {
 
     @Override
     public int counts(int id) throws SQLException {
-        String sql = "SELECT COUNT(Record_id) FROM accounts AS a LEFT JOIN rs_users_books AS r ON (a.Book_id = r.Book_id) WHERE r.User_id =?;";
+        String sql = "SELECT COUNT(Record_id) FROM accounts WHERE User_id =?;";
         int count;
         try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
             preparedStatement.setInt(1, id);
@@ -162,7 +163,7 @@ public class AccountDaoImpl implements AccountDao {
 
     @Override
     public List<AccountsEx> listLimitAccounts(int id, int startPage, int size) throws SQLException {
-        String sql = "SELECT a.* FROM accounts AS a LEFT JOIN rs_users_books AS r ON (a.Book_id = r.Book_id) WHERE r.User_id =? ORDER BY Record_date DESC LIMIT ?,?;";
+        String sql = "SELECT * FROM accounts WHERE User_id=? ORDER BY Record_date DESC LIMIT ?,?;";
         List<AccountsEx> list = new ArrayList<>();
         try (PreparedStatement parameterMetaData = conn.prepareStatement(sql)) {
             int index2 = 1;
@@ -174,7 +175,7 @@ public class AccountDaoImpl implements AccountDao {
                 int index = 1;
                 AccountsEx accountsEx = new AccountsEx();
                 accountsEx.setRecordId(resultSet.getInt(index++));
-                accountsEx.setBookId(resultSet.getInt(index++));
+                accountsEx.setUserId(resultSet.getInt(index++));
                 accountsEx.setRecordName(resultSet.getString(index++));
                 accountsEx.setRecordType(resultSet.getString(index++));
                 accountsEx.setRecordMode(resultSet.getString(index++));
@@ -198,7 +199,7 @@ public class AccountDaoImpl implements AccountDao {
             while (resultSet.next()) {
                 int index = 1;
                 accountsEx.setRecordId(resultSet.getInt(index++));
-                accountsEx.setBookId(resultSet.getInt(index++));
+                accountsEx.setUserId(resultSet.getInt(index++));
                 accountsEx.setRecordName(resultSet.getString(index++));
                 accountsEx.setRecordType(resultSet.getString(index++));
                 accountsEx.setRecordMode(resultSet.getString(index++));

@@ -9,6 +9,7 @@ import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.util.CellRangeAddress;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.sql.Date;
 import java.util.List;
@@ -29,7 +30,7 @@ public class ExportExcel {
      * @return HSSFWorkbook
      * @throws SQLException SQLException
      */
-    public static HSSFWorkbook export(int id, Date date1, Date date2, String fileName) throws SQLException {
+    public static HSSFWorkbook export(int id, Date date1, Timestamp date2, String fileName) throws SQLException {
         //第一步，创建一个workbook,对应一个Excel文件
         HSSFWorkbook workbook = new HSSFWorkbook();
 

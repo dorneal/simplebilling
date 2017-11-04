@@ -83,6 +83,8 @@
                                       method="post">
                                     <div class="tab-pane" id="panel-731068">
                                         <input type="hidden" value="${requestScope.accountsEx.recordId}"
+                                               name="recordId">
+                                        <input type="hidden" value="${requestScope.accountsEx.recordName}"
                                                name="recordName">
                                         <div class="input-group input-group-lg">
                                             <span class="icon-calculator input-group-addon"></span>

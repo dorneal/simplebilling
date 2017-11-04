@@ -13,7 +13,7 @@ import java.util.Objects;
 public class Accounts implements Serializable {
     private Integer recordId;
 
-    private Integer bookId;
+    private Integer userId;
 
     private String recordName;
 
@@ -35,12 +35,12 @@ public class Accounts implements Serializable {
         this.recordId = recordId;
     }
 
-    public Integer getBookId() {
-        return bookId;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setBookId(Integer bookId) {
-        this.bookId = bookId;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public String getRecordName() {
@@ -95,7 +95,7 @@ public class Accounts implements Serializable {
     public String toString() {
         return "Accounts{" +
                 "recordId=" + recordId +
-                ", bookId=" + bookId +
+                ", userId=" + userId +
                 ", recordName=" + recordName +
                 ", recordType=" + recordType +
                 ", recordMode=" + recordMode +
@@ -115,7 +115,7 @@ public class Accounts implements Serializable {
         }
         Accounts accounts = (Accounts) o;
         return Objects.equals(getRecordId(), accounts.getRecordId()) &&
-                Objects.equals(getBookId(), accounts.getBookId()) &&
+                Objects.equals(getUserId(), accounts.getUserId()) &&
                 Objects.equals(getRecordName(), accounts.getRecordName()) &&
                 Objects.equals(getRecordType(), accounts.getRecordType()) &&
                 Objects.equals(getRecordMode(), accounts.getRecordMode()) &&
@@ -126,6 +126,6 @@ public class Accounts implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getRecordId(), getBookId(), getRecordName(), getRecordType(), getRecordMode(), getMoney(), getRecordDate(), getRecordRemark());
+        return Objects.hash(getRecordId(), getUserId(), getRecordName(), getRecordType(), getRecordMode(), getMoney(), getRecordDate(), getRecordRemark());
     }
 }

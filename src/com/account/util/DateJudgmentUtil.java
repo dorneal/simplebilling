@@ -46,11 +46,10 @@ public class DateJudgmentUtil {
     /**
      * 返回一个到这个月1号的时间段
      *
-     * @param date 当前时间
      * @return int
      * @throws Exception Exception
      */
-    public static int dayForMonth(Date date) throws Exception {
+    public static int dayForMonth() throws Exception {
         return Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
     }
 }

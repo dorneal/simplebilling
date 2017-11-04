@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.sql.Date;
+import java.sql.Timestamp;
 
 /**
  * 将本月账目导出Excel
@@ -22,12 +23,11 @@ public class ExportAccountByMonthServlet extends HttpServlet {
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         UsersEx usersEx = (UsersEx) request.getSession().getAttribute("user");
-        Date sqlDate = new Date(new java.util.Date().getTime());
         try {
             // 调用Excel工具类导出方法
             HSSFWorkbook wb = ExportExcel.export(usersEx.getUserId(),
-                    new Date(DateJudgmentUtil.getPeriodOfWeek(DateJudgmentUtil.dayForMonth(sqlDate)).getTime()),
-                    sqlDate, "本月账本");
+                    new Date(DateJudgmentUtil.getPeriodOfWeek(DateJudgmentUtil.dayForMonth()).getTime()),
+                    new Timestamp(System.currentTimeMillis()), "本月账本");
             response.setContentType("application/vnd.ms-excel");
             response.setHeader("Content-disposition", "attachment;filename=myAccountOfMonth.xls");
             OutputStream ouputStream = response.getOutputStream();

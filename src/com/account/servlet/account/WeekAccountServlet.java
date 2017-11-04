@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -35,8 +36,7 @@ public class WeekAccountServlet extends HttpServlet {
                     accountService.listAccountsByDate(
                             usersEx.getUserId(),
                             new Date(DateJudgmentUtil.getPeriodOfWeek(DateJudgmentUtil.dayForWeek(sqlDate)).getTime()),
-                            sqlDate);
-            System.out.println(accountsExList.size());
+                            new Timestamp(System.currentTimeMillis()));
             Gson gson = new Gson();
             String weekAccountsJson = gson.toJson(accountsExList);
             response.getWriter().write(weekAccountsJson);

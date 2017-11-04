@@ -9,6 +9,7 @@ import com.account.service.AccountService;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.*;
 
 /**
@@ -30,7 +31,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public List<AccountsEx> listAccountsByDate(int id, Date date, Date date2) throws SQLException {
+    public List<AccountsEx> listAccountsByDate(int id, Date date, Timestamp date2) throws SQLException {
         List<AccountsEx> accountsExList = accountDao.listAccountsByDate(id, date, date2);
         // 数据处理
         for (int i = 0; i < accountsExList.size() - 1; i++) {
@@ -48,7 +49,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public List<AccountsEx> listAccountsByDateOfExcel(int id, Date date, Date date2) throws SQLException {
+    public List<AccountsEx> listAccountsByDateOfExcel(int id, Date date, Timestamp date2) throws SQLException {
         return accountDao.listAccountsByDate(id, date, date2);
     }
 

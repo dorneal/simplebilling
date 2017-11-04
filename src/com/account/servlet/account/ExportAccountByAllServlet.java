@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.sql.Date;
+import java.sql.Timestamp;
 
 /**
  * 将所有账目导出Excel
@@ -21,13 +22,12 @@ public class ExportAccountByAllServlet extends HttpServlet {
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         UsersEx usersEx = (UsersEx) request.getSession().getAttribute("user");
-        Date sqlDate = new Date(new java.util.Date().getTime());
         java.util.Date date = usersEx.getRegisterDate();
         try {
             // 调用Excel工具类导出方法
             HSSFWorkbook wb = ExportExcel.export(usersEx.getUserId(),
                     new Date(date.getTime()),
-                    sqlDate, "所有账目");
+                    new Timestamp(System.currentTimeMillis()), "所有账目");
             response.setContentType("application/vnd.ms-excel");
             response.setHeader("Content-disposition", "attachment;filename=myAccountOfAll.xls");
             OutputStream ouputStream = response.getOutputStream();

@@ -41,7 +41,7 @@ public interface AccountDao {
      * @return List
      * @throws SQLException SQLException
      */
-    List<AccountsEx> listAccountsByDate(int id, Date date, Date date2) throws SQLException;
+    List<AccountsEx> listAccountsByDate(int id, Date date, Timestamp date2) throws SQLException;
 
     /**
      * 插入一条账目
@@ -66,7 +66,7 @@ public interface AccountDao {
      * @throws SQLException SQLException
      */
     void removeAccounts(int id) throws SQLException;
-    
+
 
     /**
      * 查询该用户的总记录数

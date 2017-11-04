@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 
@@ -26,8 +27,6 @@ public class MonthAccountServlet extends HttpServlet {
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         AccountService accountService = new AccountServiceImpl();
-        // 创建一个sqlDate
-        Date sqlDate = new Date(new java.util.Date().getTime());
         // 获取session的用户，取得id
         UsersEx usersEx = (UsersEx) request.getSession().getAttribute("user");
         try {
@@ -35,8 +34,8 @@ public class MonthAccountServlet extends HttpServlet {
             List<AccountsEx> accountsExList =
                     accountService.listAccountsByDate(
                             usersEx.getUserId(),
-                            new Date(DateJudgmentUtil.getPeriodOfWeek(DateJudgmentUtil.dayForMonth(sqlDate)).getTime()),
-                            sqlDate);
+                            new Date(DateJudgmentUtil.getPeriodOfWeek(DateJudgmentUtil.dayForMonth()).getTime()),
+                            new Timestamp(System.currentTimeMillis()));
             System.out.println(accountsExList.size());
             Gson gson = new Gson();
             String monthAccountsJson = gson.toJson(accountsExList);
