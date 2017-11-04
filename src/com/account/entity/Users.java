@@ -2,7 +2,6 @@ package com.account.entity;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.Date;
 
 /**
  * 用户实体类
@@ -13,8 +12,6 @@ public class Users implements Serializable {
     private Integer userId;
 
     private String userName;
-
-    private String userAvatar;
 
     private String userPassword;
 
@@ -42,14 +39,6 @@ public class Users implements Serializable {
 
     public void setUserName(String userName) {
         this.userName = userName;
-    }
-
-    public String getUserAvatar() {
-        return userAvatar;
-    }
-
-    public void setUserAvatar(String userAvatar) {
-        this.userAvatar = userAvatar == null ? null : userAvatar.trim();
     }
 
     public String getUserPassword() {
@@ -105,7 +94,6 @@ public class Users implements Serializable {
         return "Users{" +
                 "userId=" + userId +
                 ", userName='" + userName + '\'' +
-                ", userAvatar='" + userAvatar + '\'' +
                 ", userPassword='" + userPassword + '\'' +
                 ", userSex='" + userSex + '\'' +
                 ", userPhonenum='" + userPhonenum + '\'' +

@@ -1,5 +1,6 @@
 package com.account.servlet.user;
 
+
 import com.account.entity.UsersEx;
 import com.account.service.UserService;
 import com.account.service.impl.UserServiceImpl;
@@ -12,31 +13,29 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 
 /**
- * 用户注册servlet
+ * 用户修改信息servlet
  *
  * @author Neal
  */
-public class UserRegisterServlet extends HttpServlet {
+public class UserModifyServlet extends HttpServlet {
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         PrintWriter out = response.getWriter();
-        String userRegisterJson = request.getParameter("userRegisterJson");
+        String userModifyJson = request.getParameter("userModifyJson");
         Gson gson = new Gson();
-        UsersEx usersEx = gson.fromJson(userRegisterJson, UsersEx.class);
-        usersEx.setRegisterDate(new Timestamp(System.currentTimeMillis()));
+        UsersEx usersEx = gson.fromJson(userModifyJson, UsersEx.class);
         UserService userService = new UserServiceImpl();
         try {
             int flag1 = userService.existEmail(usersEx);
             int flag2 = userService.existUserName(usersEx);
             int flag3 = userService.existPhoneNum(usersEx);
-            if (flag1 == 0) {
-                if (flag2 == 0) {
-                    if (flag3 == 0) {
+            if (flag1 <= 1) {
+                if (flag2 <= 1) {
+                    if (flag3 <= 1) {
                         out.write("SUCCESS");
-                        userService.saveUser(usersEx);
+                        userService.update(usersEx);
                     } else {
                         out.write("existPhoneNum");
                     }

@@ -31,17 +31,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean existPhoneNum(UsersEx usersEx) throws SQLException {
+    public int existPhoneNum(UsersEx usersEx) throws SQLException {
         return userDao.existPhoneNum(usersEx);
     }
 
     @Override
-    public boolean existUserName(UsersEx usersEx) throws SQLException {
+    public int existUserName(UsersEx usersEx) throws SQLException {
         return userDao.existUserName(usersEx);
     }
 
     @Override
-    public boolean existEmail(UsersEx usersEx) throws SQLException {
+    public int existEmail(UsersEx usersEx) throws SQLException {
         return userDao.existEmail(usersEx);
     }
 }

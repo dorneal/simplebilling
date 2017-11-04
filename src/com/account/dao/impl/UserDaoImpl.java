@@ -32,15 +32,26 @@ public class UserDaoImpl implements UserDao {
         try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
             int index2 = 1;
             preparedStatement.setString(index2++, usersEx.getUserPassword());
-            preparedStatement.setString(index2++, usersEx.getUserName());
-            preparedStatement.setString(index2++, usersEx.getUserEmail());
-            preparedStatement.setString(index2, usersEx.getUserPhonenum());
+            if (usersEx.getUserName() != null) {
+                preparedStatement.setString(index2++, usersEx.getUserName());
+            } else {
+                preparedStatement.setString(index2++, null);
+            }
+            if (usersEx.getUserEmail() != null) {
+                preparedStatement.setString(index2++, usersEx.getUserEmail());
+            } else {
+                preparedStatement.setString(index2++, null);
+            }
+            if (usersEx.getUserPhonenum() != null) {
+                preparedStatement.setString(index2, usersEx.getUserPhonenum());
+            } else {
+                preparedStatement.setString(index2, null);
+            }
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 int index = 1;
                 usersEx1.setUserId(resultSet.getInt(index++));
                 usersEx1.setUserName(resultSet.getString(index++));
-                usersEx1.setUserAvatar(resultSet.getString(index++));
                 usersEx1.setUserPassword(resultSet.getString(index++));
                 usersEx1.setUserSex(resultSet.getString(index++));
                 usersEx1.setUserPhonenum(resultSet.getString(index++));
@@ -60,11 +71,10 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void saveUser(UsersEx usersEx) throws SQLException {
-        String sql = "INSERT INTO users(User_name, User_Avatar, User_password, User_sex,User_phoneNum,User_signature, User_email,Register_date) VALUES(?,?,?,?,?,?,?,?);";
+        String sql = "INSERT INTO users(User_name, User_password, User_sex,User_phoneNum,User_signature, User_email,Register_date) VALUES(?,?,?,?,?,?,?);";
         try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
             int index = 1;
             preparedStatement.setString(index++, usersEx.getUserName());
-            preparedStatement.setString(index++, usersEx.getUserAvatar());
             preparedStatement.setString(index++, usersEx.getUserPassword());
             preparedStatement.setString(index++, usersEx.getUserSex());
             preparedStatement.setString(index++, usersEx.getUserPhonenum());
@@ -72,74 +82,69 @@ public class UserDaoImpl implements UserDao {
             preparedStatement.setString(index++, usersEx.getUserEmail());
             preparedStatement.setTimestamp(index, usersEx.getRegisterDate());
             preparedStatement.execute();
-            preparedStatement.close();
         }
     }
 
     @Override
     public void update(UsersEx usersEx) throws SQLException {
-        String sql = "UPDATE users SET User_name=?,User_Avatar=?,User_password=?,User_sex=?,User_phoneNum=?,User_signature=?,User_email=?,Register_date=? WHERE User_id=?;";
+        String sql = "UPDATE users SET User_name=?,User_sex=?,User_phoneNum=?,User_signature=?,User_email=? WHERE User_id=?;";
         try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
             int index = 1;
             preparedStatement.setString(index++, usersEx.getUserName());
-            preparedStatement.setString(index++, usersEx.getUserAvatar());
-            preparedStatement.setString(index++, usersEx.getUserPassword());
             preparedStatement.setString(index++, usersEx.getUserSex());
             preparedStatement.setString(index++, usersEx.getUserPhonenum());
             preparedStatement.setString(index++, usersEx.getUserSignature());
             preparedStatement.setString(index++, usersEx.getUserEmail());
-            preparedStatement.setTimestamp(index++, usersEx.getRegisterDate());
             preparedStatement.setInt(index, usersEx.getUserId());
             preparedStatement.execute();
-            preparedStatement.close();
         }
     }
 
     @Override
-    public boolean existPhoneNum(UsersEx usersEx) throws SQLException {
+    public int existPhoneNum(UsersEx usersEx) throws SQLException {
         String sql = "SELECT COUNT(*) FROM users WHERE User_phoneNum=?;";
         try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
             preparedStatement.setString(1, usersEx.getUserPhonenum());
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
             int count = resultSet.getInt(1);
-            if (count < 1) {
-                return true;
+            if (count != 0) {
+                return count;
+
             }
-            resultSet.close();
         }
-        return false;
+        return 0;
     }
 
     @Override
-    public boolean existUserName(UsersEx usersEx) throws SQLException {
+    public int existUserName(UsersEx usersEx) throws SQLException {
         String sql = "SELECT COUNT(*) FROM users WHERE User_name=?;";
         try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
             preparedStatement.setString(1, usersEx.getUserName());
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
             int count = resultSet.getInt(1);
-            if (count < 1) {
-                return true;
+            if (count != 0) {
+                return count;
+
             }
-            resultSet.close();
         }
-        return false;
+        return 0;
     }
 
     @Override
-    public boolean existEmail(UsersEx usersEx) throws SQLException {
+    public int existEmail(UsersEx usersEx) throws SQLException {
         String sql = "SELECT COUNT(*) FROM users WHERE User_email=?;";
         try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
             preparedStatement.setString(1, usersEx.getUserEmail());
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
             int count = resultSet.getInt(1);
-            if (count < 1) {
-                return true;
+            if (count != 0) {
+                return count;
+
             }
-            preparedStatement.close();
         }
-        return false;
+        return 0;
     }
 }

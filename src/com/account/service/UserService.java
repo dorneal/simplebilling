@@ -43,7 +43,7 @@ public interface UserService {
      * @return boolean
      * @throws SQLException SQLException
      */
-    boolean existPhoneNum(UsersEx usersEx) throws SQLException;
+    int existPhoneNum(UsersEx usersEx) throws SQLException;
 
     /**
      * 检查用户名是否存在
@@ -52,7 +52,7 @@ public interface UserService {
      * @return boolean
      * @throws SQLException SQLException
      */
-    boolean existUserName(UsersEx usersEx) throws SQLException;
+    int existUserName(UsersEx usersEx) throws SQLException;
 
     /**
      * 检查邮箱是否已经存在
@@ -61,5 +61,5 @@ public interface UserService {
      * @return boolean
      * @throws SQLException SQLException
      */
-    boolean existEmail(UsersEx usersEx) throws SQLException;
+    int existEmail(UsersEx usersEx) throws SQLException;
 }

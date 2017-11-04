@@ -41,9 +41,9 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li><a href="/simplebilling/page/public/index.html">主页</a></li>
-                            <li><a href="#">我的信息</a></li>
+                            <li><a href="/simplebilling/page/private/modifyUser.jsp">修改信息</a></li>
                             <li class="divider"></li>
-                            <li><a href="#">上传备份</a></li>
+                            <li><a href="#">修改密码</a></li>
                             <li class="divider"></li>
                             <li><a href="${pageContext.request.contextPath}/user/UserQuitServlet">退出</a></li>
                         </ul>
@@ -89,19 +89,6 @@
                                         所有</h3></a></li>
                                 </ol>
                             </li>
-                            <li class="second-class-menu"><h2><span class="icon-plus"></span> <span
-                                    class="icon-stats-dots"></span> 修改</h2>
-                                <ol>
-                                    <li class="third-class-menu"><a
-                                            href="${pageContext.request.contextPath}/page/private/"><h3>编辑信息</h3></a>
-                                    </li>
-                                    <li class="third-class-menu"><a
-                                            href="${pageContext.request.contextPath}/page/private/"><h3>修改账目</h3></a>
-                                    </li>
-                                </ol>
-                            </li>
-                            <li><a href=""><h2 href="${pageContext.request.contextPath}/page/private/"><span
-                                    class="icon-bubbles4"></span> 导出</h2></a></li>
                             <li class="second-class-menu"><h2><span class="icon-plus"></span> <span
                                     class="icon-question"></span> 帮助</h2>
                                 <ol>
