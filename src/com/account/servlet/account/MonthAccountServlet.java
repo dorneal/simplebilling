@@ -19,7 +19,7 @@ import java.util.List;
 
 
 /**
- * 每个月账目记录servlet
+ * 每个月账目记录servlet，用于可视化数据显示
  *
  * @author Neal
  */
@@ -37,7 +37,9 @@ public class MonthAccountServlet extends HttpServlet {
                             new Date(DateJudgmentUtil.getPeriodOfWeek(DateJudgmentUtil.dayForMonth()).getTime()),
                             new Timestamp(System.currentTimeMillis()));
             Gson gson = new Gson();
+            // 将数据封装成json字符串
             String monthAccountsJson = gson.toJson(accountsExList);
+            // 返回数据给请求页
             response.getWriter().write(monthAccountsJson);
             response.getWriter().flush();
             response.getWriter().close();

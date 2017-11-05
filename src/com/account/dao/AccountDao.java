@@ -27,10 +27,10 @@ public interface AccountDao {
      *
      * @param id   用户ID
      * @param date 时间
-     * @return Accounts
+     * @return List
      * @throws SQLException SQLException
      */
-    AccountsEx getAccountsByDate(int id, Date date) throws SQLException;
+    List<AccountsEx> listAccountsBySearchDate(int id, Date date) throws SQLException;
 
     /**
      * 查询指定日期范围的记录

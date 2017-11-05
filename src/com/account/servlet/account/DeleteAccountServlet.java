@@ -18,10 +18,13 @@ import java.sql.SQLException;
 public class DeleteAccountServlet extends HttpServlet {
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // 从页面拿到账目ID
         String recordId = request.getParameter("recordId");
         AccountService accountService = new AccountServiceImpl();
         try {
+            // 进行删除
             accountService.removeAccounts(Integer.valueOf(recordId));
+            // 重定向到分页数据显示页面
             response.sendRedirect(request.getContextPath() + "/account/ShowAccountServlet");
         } catch (SQLException e) {
             e.printStackTrace();

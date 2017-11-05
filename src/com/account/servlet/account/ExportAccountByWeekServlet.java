@@ -2,7 +2,7 @@ package com.account.servlet.account;
 
 import com.account.entity.UsersEx;
 import com.account.util.DateJudgmentUtil;
-import com.account.util.ExportExcel;
+import com.account.util.ExportExcelUtil;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
 import javax.servlet.ServletException;
@@ -26,7 +26,7 @@ public class ExportAccountByWeekServlet extends HttpServlet {
         Date sqlDate = new Date(new java.util.Date().getTime());
         try {
             // 调用Excel工具类导出方法
-            HSSFWorkbook wb = ExportExcel.export(usersEx.getUserId(),
+            HSSFWorkbook wb = ExportExcelUtil.export(usersEx.getUserId(),
                     new Date(DateJudgmentUtil.getPeriodOfWeek(DateJudgmentUtil.dayForWeek(sqlDate)).getTime()),
                     new Timestamp(System.currentTimeMillis()), "本周账本");
             response.setContentType("application/vnd.ms-excel");

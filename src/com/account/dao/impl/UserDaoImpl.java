@@ -2,7 +2,7 @@ package com.account.dao.impl;
 
 import com.account.dao.UserDao;
 import com.account.entity.UsersEx;
-import com.account.util.DBPoolUtil;
+import com.account.util.DbPoolUtil;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,7 +19,7 @@ public class UserDaoImpl implements UserDao {
 
     static {
         try {
-            conn = DBPoolUtil.getConnection();
+            conn = DbPoolUtil.getConnection();
         } catch (SQLException e) {
             e.printStackTrace();
         }

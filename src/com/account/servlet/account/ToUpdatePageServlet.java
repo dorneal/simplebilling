@@ -19,19 +19,25 @@ import java.sql.SQLException;
 public class ToUpdatePageServlet extends HttpServlet {
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // 拿到该账目ID
         String recordId = request.getParameter("recordId");
         AccountService accountService = new AccountServiceImpl();
-        try {
-            AccountsEx accountsEx = accountService.getAccounts(Integer.valueOf(recordId));
-            request.setAttribute("accountsEx", accountsEx);
-            String flag = "收入";
-            if (flag.equals(accountsEx.getRecordName())) {
-                request.getRequestDispatcher("/page/private/recordModifyIncome.jsp").forward(request, response);
-            } else {
-                request.getRequestDispatcher("/page/private/recordModifyOut.jsp").forward(request, response);
+        if (recordId != null && !"".equals(recordId)) {
+            try {
+                AccountsEx accountsEx = accountService.getAccounts(Integer.valueOf(recordId));
+                request.setAttribute("accountsEx", accountsEx);
+                String flag = "收入";
+                // 判断是收入页面，还是支出页面
+                if (flag.equals(accountsEx.getRecordName())) {
+                    // 跳转到收入记录页面
+                    request.getRequestDispatcher("/page/private/recordModifyIncome.jsp").forward(request, response);
+                } else {
+                    // 跳转到支出记录页面
+                    request.getRequestDispatcher("/page/private/recordModifyOut.jsp").forward(request, response);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
 }

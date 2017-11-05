@@ -5,7 +5,7 @@ import com.account.entity.UsersEx;
 import java.sql.SQLException;
 
 /**
- * 用户服务接口
+ * 用户业务逻辑接口
  *
  * @author Neal
  */

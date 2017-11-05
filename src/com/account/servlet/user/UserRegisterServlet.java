@@ -29,6 +29,7 @@ public class UserRegisterServlet extends HttpServlet {
         usersEx.setRegisterDate(new Timestamp(System.currentTimeMillis()));
         UserService userService = new UserServiceImpl();
         try {
+            // 根据返回的count计算，是否存在多个值，注册时，必须要返回的count为0，更新时，可以小于等于1
             int flag1 = userService.existEmail(usersEx);
             int flag2 = userService.existUserName(usersEx);
             int flag3 = userService.existPhoneNum(usersEx);

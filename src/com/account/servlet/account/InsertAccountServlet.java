@@ -48,7 +48,9 @@ public class InsertAccountServlet extends HttpServlet {
         }
         AccountService accountService = new AccountServiceImpl();
         try {
+            // 添加账目
             accountService.saveAccounts(accountsEx);
+            // 添加成功，跳转到显示页面
             request.getRequestDispatcher("/account/ShowAccountServlet").forward(request, response);
         } catch (SQLException e) {
             e.printStackTrace();

@@ -18,7 +18,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 /**
- * 每周账目记录的servlet
+ * 每周账目记录的servlet，用于可视化数据显示
  *
  * @author Neal
  */

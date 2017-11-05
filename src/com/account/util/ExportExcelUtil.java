@@ -19,7 +19,7 @@ import java.util.List;
  *
  * @author Neal
  */
-public class ExportExcel {
+public class ExportExcelUtil {
     /**
      * Excel导出类
      *
@@ -84,6 +84,8 @@ public class ExportExcel {
         font.setBold(true);
         style2.setFont(font);
         HSSFCell cell = row.createCell(index++);
+
+        // 设置标题
         cell.setCellValue("收/支");
         cell.setCellStyle(style2);
         cell = row.createCell(index++);

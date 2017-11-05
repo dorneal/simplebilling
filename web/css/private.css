@@ -20,6 +20,13 @@ html, body {
 
 body {
     background-color: #ececec;
+    scrollbar-face-color: #FF0000;
+    scrollbar-base-color: #900;
+    scrollbar-highlight-color: #00FF00;
+    scrollbar-darkshadow-color: #ff0000;
+    scrollbar-3dlight-color: #ff0000;
+    scrollbar-arrow-color: #ff0000;
+    scrollbar-track-color: #ffcccc;
 }
 
 div.panel-set {

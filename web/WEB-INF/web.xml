@@ -13,10 +13,12 @@
         <filter-name>ExistUserFilter</filter-name>
         <filter-class>com.account.filter.ExistUserFilter</filter-class>
     </filter>
+    <!--拦截所有私有页面-->
     <filter-mapping>
         <filter-name>ExistUserFilter</filter-name>
         <url-pattern>/page/private/*</url-pattern>
     </filter-mapping>
+    <!--拦截所有用户servlet-->
     <filter-mapping>
         <filter-name>ExistUserFilter</filter-name>
         <url-pattern>/account/*</url-pattern>
@@ -142,6 +144,16 @@
         <url-pattern>/account/InsertAccountServlet</url-pattern>
     </servlet-mapping>
 
+    <!--搜索账目-->
+    <servlet>
+        <servlet-name>SearchAccountServlet</servlet-name>
+        <servlet-class>com.account.servlet.account.SearchAccountServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SearchAccountServlet</servlet-name>
+        <url-pattern>/account/SearchAccountServlet</url-pattern>
+    </servlet-mapping>
+
     <!--跳转到修改页面-->
     <servlet>
         <servlet-name>ToUpdatePageServlet</servlet-name>
@@ -197,6 +209,7 @@
         <listener-class>com.account.listener.OnlineNumberListener</listener-class>
     </listener>
 
+    <!--配置错误页面-->
     <error-page>
         <error-code>404</error-code>
         <location>/page/public/error.html</location>

@@ -15,9 +15,10 @@
                     <span class="icon-menu4"></span></a>
             </div>
             <div class="collapse navbar-collapse navbar-right" id="example-navbar-collapse">
-                <form class="navbar-form navbar-left" role="search">
+                <form class="navbar-form navbar-left" role="search"
+                      action="/simplebilling/account/SearchAccountServlet" method="post">
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Search">
+                        <input type="date" class="form-control" placeholder="Search" name="searchDate">
                     </div>
                     <button type="submit" class="btn btn-default">提交</button>
                 </form>

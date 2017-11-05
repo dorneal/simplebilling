@@ -16,7 +16,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 /**
- * 获取所有的记录servlet
+ * 获取所有的记录servlet，用于可视化数据显示
  *
  * @author Neal
  */
@@ -36,6 +36,7 @@ public class AllAccountServlet extends HttpServlet {
                             new Date(date.getTime()),
                             new Timestamp(System.currentTimeMillis()));
             Gson gson = new Gson();
+            // 将数据封装成json字符串
             String allAccountsJson = gson.toJson(accountsExList);
             response.getWriter().write(allAccountsJson);
             response.getWriter().flush();

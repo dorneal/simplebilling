@@ -2,7 +2,7 @@ package com.account.servlet.account;
 
 import com.account.entity.UsersEx;
 import com.account.util.DateJudgmentUtil;
-import com.account.util.ExportExcel;
+import com.account.util.ExportExcelUtil;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
 import javax.servlet.ServletException;
@@ -22,10 +22,11 @@ import java.sql.Timestamp;
 public class ExportAccountByMonthServlet extends HttpServlet {
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // 获取session中的user对象
         UsersEx usersEx = (UsersEx) request.getSession().getAttribute("user");
         try {
             // 调用Excel工具类导出方法
-            HSSFWorkbook wb = ExportExcel.export(usersEx.getUserId(),
+            HSSFWorkbook wb = ExportExcelUtil.export(usersEx.getUserId(),
                     new Date(DateJudgmentUtil.getPeriodOfWeek(DateJudgmentUtil.dayForMonth()).getTime()),
                     new Timestamp(System.currentTimeMillis()), "本月账本");
             response.setContentType("application/vnd.ms-excel");

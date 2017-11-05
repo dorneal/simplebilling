@@ -13,27 +13,29 @@ import java.util.Properties;
  *
  * @author Neal
  */
-public class DBPoolUtil {
+public class DbPoolUtil {
 
-    //数据库连接池
+    /**
+     * 数据库连接池
+     */
     private static BasicDataSource dbcp;
 
-    //为不同线程管理连接
+    /**
+     * 为不同线程管理连接
+     */
     private static ThreadLocal<Connection> tl;
 
     //通过配置文件来获取数据库参数
     static {
         try {
             Properties prop = new Properties();
-
-            InputStream is = DBPoolUtil.class.getClassLoader().getResourceAsStream("config.properties");
-
+            // 加载配置
+            InputStream is = DbPoolUtil.class.getClassLoader().getResourceAsStream("config.properties");
             prop.load(is);
             is.close();
 
             //一、初始化连接池
             dbcp = new BasicDataSource();
-
             //设置驱动 (Class.forName())
             dbcp.setDriverClassName(prop.getProperty("jdbc.driver"));
             //设置url
@@ -95,7 +97,7 @@ public class DBPoolUtil {
 
 
     /**
-     * 关闭数据库连接
+     * 真正关闭数据库连接
      */
     public static void closeConnection() {
         try {

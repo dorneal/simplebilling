@@ -2,7 +2,7 @@ package com.account.dao.impl;
 
 import com.account.dao.AccountDao;
 import com.account.entity.AccountsEx;
-import com.account.util.DBPoolUtil;
+import com.account.util.DbPoolUtil;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ public class AccountDaoImpl implements AccountDao {
 
     static {
         try {
-            conn = DBPoolUtil.getConnection();
+            conn = DbPoolUtil.getConnection();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -50,15 +50,16 @@ public class AccountDaoImpl implements AccountDao {
     }
 
     @Override
-    public AccountsEx getAccountsByDate(int id, Date date) throws SQLException {
-        String sql = "SELECT * from accounts WHERE User_id=? AND Record_date=?;";
-        AccountsEx accountsEx = new AccountsEx();
+    public List<AccountsEx> listAccountsBySearchDate(int id, Date date) throws SQLException {
+        String sql = "SELECT * from accounts WHERE User_id=? AND DATE(Record_date)=?;";
+        List<AccountsEx> accountsExList = new ArrayList<>();
         try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
             preparedStatement.setInt(1, id);
             preparedStatement.setDate(2, date);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 int index = 1;
+                AccountsEx accountsEx = new AccountsEx();
                 accountsEx.setRecordId(resultSet.getInt(index++));
                 accountsEx.setUserId(resultSet.getInt(index++));
                 accountsEx.setRecordName(resultSet.getString(index++));
@@ -67,13 +68,11 @@ public class AccountDaoImpl implements AccountDao {
                 accountsEx.setMoney(resultSet.getBigDecimal(index++));
                 accountsEx.setRecordDate(resultSet.getTimestamp(index++));
                 accountsEx.setRecordRemark(resultSet.getString(index));
+                accountsExList.add(accountsEx);
             }
             resultSet.close();
         }
-        if (accountsEx.getRecordId() != null) {
-            return accountsEx;
-        }
-        return null;
+        return accountsExList;
     }
 
     @Override

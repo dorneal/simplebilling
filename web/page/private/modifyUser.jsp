@@ -80,7 +80,7 @@
                             <div class="panel-body">
                                 <div class="col-md-12">
                                     <form class="bs-example bs-example-form" role="form"
-                                          action="/simplebilling/user/UserModifyServlet">
+                                          action="/simplebilling/user/UserModifyServlet" method="post">
                                         <input type="hidden" value="${sessionScope.user.userId}" name="userId">
                                         <div class="input-group">
                                             <span class="input-group-addon icon-user icon-big-color"></span>

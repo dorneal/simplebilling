@@ -9,7 +9,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 /**
- * 账目服务接口
+ * 账目业务逻辑接口
  *
  * @author Neal
  */
@@ -31,7 +31,7 @@ public interface AccountService {
      * @return Accounts
      * @throws SQLException SQLException
      */
-    AccountsEx getAccountsByDate(int id, Date date) throws SQLException;
+    List<AccountsEx> listAccountsBySearchDate(int id, Date date) throws SQLException;
 
     /**
      * 查询指定日期范围的记录,用于图表显示

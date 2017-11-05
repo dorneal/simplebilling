@@ -13,7 +13,7 @@ import java.sql.Timestamp;
 import java.util.*;
 
 /**
- * 账目服务接口实现类
+ * 账目业务逻辑实现类
  *
  * @author Neal
  */
@@ -26,8 +26,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public AccountsEx getAccountsByDate(int id, Date date) throws SQLException {
-        return accountDao.getAccountsByDate(id, date);
+    public List<AccountsEx> listAccountsBySearchDate(int id, Date date) throws SQLException {
+        return accountDao.listAccountsBySearchDate(id, date);
     }
 
     @Override

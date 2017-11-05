@@ -8,7 +8,7 @@ import com.account.service.UserService;
 import java.sql.SQLException;
 
 /**
- * 用户业务类
+ * 用户业务逻辑实现类
  *
  * @author Neal
  */

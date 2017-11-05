@@ -21,14 +21,15 @@ import java.util.List;
 public class ShowUser extends HttpServlet {
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // 这里查值，放值
+        // 获取session中的user对象
         UsersEx user = (UsersEx) request.getSession().getAttribute("user");
         AccountService accountService = new AccountServiceImpl();
         try {
+            // 查询该用户的所有数据
             List<AccountsEx> listAccounts = accountService.listAccounts(user.getUserId());
-            if (listAccounts != null) {
-                request.setAttribute("listAccounts", listAccounts);
-            }
+            // 将数据放入request中
+            request.setAttribute("listAccounts", listAccounts);
+            // 重定向到分页显示页面
             response.sendRedirect(request.getContextPath() + "/account/ShowAccountServlet");
         } catch (SQLException e) {
             e.printStackTrace();
