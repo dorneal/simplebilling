@@ -44,4 +44,9 @@ public class UserServiceImpl implements UserService {
     public int existEmail(UsersEx usersEx) throws SQLException {
         return userDao.existEmail(usersEx);
     }
+
+    @Override
+    public boolean modifyPassword(UsersEx usersEx, String newPassword) throws SQLException {
+        return userDao.modifyPassword(usersEx, newPassword);
+    }
 }

@@ -84,6 +84,16 @@
         <url-pattern>/user/UserModifyServlet</url-pattern>
     </servlet-mapping>
 
+    <!--用户密码修改-->
+    <servlet>
+        <servlet-name>ModifyPasswordServlet</servlet-name>
+        <servlet-class>com.account.servlet.user.ModifyPasswordServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ModifyPasswordServlet</servlet-name>
+        <url-pattern>/user/ModifyPasswordServlet</url-pattern>
+    </servlet-mapping>
+
     <!--查询显示所有的记录制成图表显示-->
     <servlet>
         <servlet-name>AllAccountServlet</servlet-name>

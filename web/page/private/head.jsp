@@ -44,7 +44,7 @@
                             <li><a href="/simplebilling/page/public/index.html">主页</a></li>
                             <li><a href="/simplebilling/page/private/modifyUser.jsp">修改信息</a></li>
                             <li class="divider"></li>
-                            <li><a href="#">修改密码</a></li>
+                            <li><a href="/simplebilling/page/private/modifyPassword.jsp">修改密码</a></li>
                             <li class="divider"></li>
                             <li><a href="${pageContext.request.contextPath}/user/UserQuitServlet">退出</a></li>
                         </ul>

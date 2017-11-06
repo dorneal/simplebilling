@@ -4,10 +4,7 @@ import com.account.dao.UserDao;
 import com.account.entity.UsersEx;
 import com.account.util.DbPoolUtil;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 /**
  * 用户DAO实现类
@@ -28,25 +25,10 @@ public class UserDaoImpl implements UserDao {
     @Override
     public UsersEx login(UsersEx usersEx) throws SQLException {
         UsersEx usersEx1 = new UsersEx();
-        String sql = "SELECT * FROM users WHERE User_password=? AND User_name=? OR  User_email=? OR User_phonenum=?;";
+        String sql = "SELECT * FROM users WHERE User_password=? AND User_phoneNum=?;";
         try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
-            int index2 = 1;
-            preparedStatement.setString(index2++, usersEx.getUserPassword());
-            if (usersEx.getUserName() != null) {
-                preparedStatement.setString(index2++, usersEx.getUserName());
-            } else {
-                preparedStatement.setString(index2++, null);
-            }
-            if (usersEx.getUserEmail() != null) {
-                preparedStatement.setString(index2++, usersEx.getUserEmail());
-            } else {
-                preparedStatement.setString(index2++, null);
-            }
-            if (usersEx.getUserPhonenum() != null) {
-                preparedStatement.setString(index2, usersEx.getUserPhonenum());
-            } else {
-                preparedStatement.setString(index2, null);
-            }
+            preparedStatement.setString(1, usersEx.getUserPassword());
+            preparedStatement.setString(2, usersEx.getUserPhonenum());
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 int index = 1;
@@ -146,5 +128,20 @@ public class UserDaoImpl implements UserDao {
             }
         }
         return 0;
+    }
+
+    @Override
+    public boolean modifyPassword(UsersEx usersEx, String newPassword) throws SQLException {
+        String sql = "UPDATE users SET User_password=? WHERE User_id=? AND User_password=? ";
+        try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+            preparedStatement.setString(1, newPassword);
+            preparedStatement.setInt(2, usersEx.getUserId());
+            preparedStatement.setString(3, usersEx.getUserPassword());
+            int resultSet = preparedStatement.executeUpdate();
+            if (resultSet == 1) {
+                return true;
+            }
+        }
+        return false;
     }
 }

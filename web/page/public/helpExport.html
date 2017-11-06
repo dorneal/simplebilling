@@ -252,7 +252,7 @@
                             </div>
                             <div class="input-group" id="divInputName">
                                 <span class="input-group-addon icon-user icon-big-color"></span>
-                                <input id="username" type="text" class="form-control" placeholder="用户名" maxlength="50">
+                                <input id="username" type="text" class="form-control" placeholder="手机号" maxlength="11">
                             </div>
                             <br>
                             <div class="input-group" id="divInputPassword">
@@ -300,27 +300,34 @@
                                         $('div#divInputName').addClass("has-error");
                                     } else {
                                         if (flag) {
-                                            $('div#divInputName').addClass("has-success");
-                                            $('div#divInputPassword').addClass("has-success");
-                                            var userJson = {"userName": username, "userPassword": password};
-                                            $.ajax({
-                                                type: "POST",
-                                                url: "/simplebilling/user/UserLoginServlet",
-                                                data: {"userJson": JSON.stringify(userJson)},
-                                                //设置为json,则返回的必须也要是json类型，不然就执行error
-                                                dataType: "text",
-                                                success: function (data) {
-                                                    if (data === 'SUCCESS') {
-                                                        // 跳转到用户查询servlet
-                                                        window.location.href = "/simplebilling/user/ShowUser";
-                                                    } else {
-                                                        $('div#divInputPassword').addClass("has-error");
+                                            var phoneReg = /^1[3|4|5|8][0-9]\d{4,8}$/;
+                                            var userJson;
+                                            // 判断登录方式
+                                            if (phoneReg.test(username)) {
+                                                $('div#divInputName').addClass("has-success");
+                                                $('div#divInputPassword').addClass("has-success");
+                                                userJson = {"userPhonenum": username, "userPassword": password};
+                                                $.ajax({
+                                                    type: "post",
+                                                    url: "/simplebilling/user/UserLoginServlet",
+                                                    data: {"userJson": JSON.stringify(userJson)},
+                                                    //设置为json,则返回的必须也要是json类型，不然就执行error
+                                                    dataType: "text",
+                                                    success: function (data) {
+                                                        if (data === 'SUCCESS') {
+                                                            // 跳转到用户查询servlet
+                                                            window.location.href = "/simplebilling/user/ShowUser";
+                                                        } else {
+                                                            $('div#divInputPassword').addClass("has-error");
+                                                        }
+                                                    },
+                                                    error: function () {
+                                                        $('div#myAlert').removeClass('hide');
                                                     }
-                                                },
-                                                error: function () {
-                                                    $('div#myAlert').removeClass('hide');
-                                                }
-                                            });
+                                                });
+                                            } else {
+                                                $('div#divInputName').addClass("has-error");
+                                            }
                                         } else {
                                             $('div#divVerifyCode').addClass("has-error");
                                         }

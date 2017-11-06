@@ -61,4 +61,14 @@ public interface UserDao {
      * @throws SQLException SQLException
      */
     int existEmail(UsersEx usersEx) throws SQLException;
+
+    /**
+     * 修改用户密码
+     *
+     * @param newPassword 新密码
+     * @param usersEx     用户对象
+     * @return boolean
+     * @throws SQLException SQLException
+     */
+    boolean modifyPassword(UsersEx usersEx, String newPassword) throws SQLException;
 }
