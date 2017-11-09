@@ -9,7 +9,7 @@ import java.util.Properties;
 
 
 /**
- * 使用连接池技术管理数据库连接
+ * 使用DBCP连接池技术管理数据库连接
  *
  * @author Neal
  */

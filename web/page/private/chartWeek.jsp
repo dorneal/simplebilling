@@ -198,8 +198,14 @@
                                                         radius: '55%',
                                                         data: [{name: nameIncomeArray[0], value: moneyIncomeArray[0]},
                                                             {name: nameIncomeArray[1], value: moneyIncomeArray[1]},
-
-                                                            {name: nameIncomeArray[3], value: moneyIncomeArray[3]}]
+                                                            {name: nameIncomeArray[2], value: moneyIncomeArray[2]},
+                                                            {name: nameIncomeArray[3], value: moneyIncomeArray[3]},
+                                                            {name: nameIncomeArray[4], value: moneyIncomeArray[4]},
+                                                            {name: nameIncomeArray[5], value: moneyIncomeArray[5]},
+                                                            {name: nameIncomeArray[6], value: moneyIncomeArray[6]},
+                                                            {name: nameIncomeArray[7], value: moneyIncomeArray[7]},
+                                                            {name: nameIncomeArray[8], value: moneyIncomeArray[8]},
+                                                            {name: nameIncomeArray[9], value: moneyIncomeArray[9]}]
                                                     }
                                                 ]
                                             })

@@ -1,0 +1,2 @@
+INSERT INTO `users` (`User_id`, `User_name`, `User_password`, `User_sex`, `User_phoneNum`, `User_signature`, `User_email`, `Register_date`) VALUES (1, 'neal', '123456', '男', '13037479765', '我懂得越多，懂我的人越少。', '1061479678@qq.com', '2017-11-6 17:46:31');
+INSERT INTO `users` (`User_id`, `User_name`, `User_password`, `User_sex`, `User_phoneNum`, `User_signature`, `User_email`, `Register_date`) VALUES (2, 'rose', '775825', '女', '13635363439', '我就是我，不一样的烟火', '2656798470@qq.com', '2017-11-9 11:11:57');
