@@ -94,13 +94,16 @@
                                     class="icon-question"></span> 帮助</h2>
                                 <ol>
                                     <li class="third-class-menu"><a
-                                            href="${pageContext.request.contextPath}/page/private/"><h3>关于记账</h3></a>
+                                            href="${pageContext.request.contextPath}/page/public/helpRecord.html"><h3>
+                                        关于记账</h3></a>
                                     </li>
                                     <li class="third-class-menu"><a
-                                            href="${pageContext.request.contextPath}/page/private/"><h3>关于修改</h3></a>
+                                            href="${pageContext.request.contextPath}/page/public/helpModify.html"><h3>
+                                        关于修改</h3></a>
                                     </li>
                                     <li class="third-class-menu"><a
-                                            href="${pageContext.request.contextPath}/page/private/"><h3>关于导出</h3></a>
+                                            href="${pageContext.request.contextPath}/page/public/helpExport.html"><h3>
+                                        关于导出</h3></a>
                                     </li>
                                 </ol>
                             </li>

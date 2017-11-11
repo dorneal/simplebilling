@@ -9,12 +9,24 @@
     <link rel="stylesheet" href="/simplebilling/css/bootstrap.css">
     <link rel="stylesheet" href="/simplebilling/css/style.css">
     <link rel="stylesheet" href="/simplebilling/css/private.css">
-    <link rel="stylesheet" href="/simplebilling/css/mystyle.css">
+    <link rel="stylesheet" href="/simplebilling/css/myStyle.css">
     <link rel="stylesheet" href="/simplebilling/css/date.css">
     <link rel="stylesheet" href="/simplebilling/css/load.css">
     <script src="/simplebilling/js/jquery-3.2.1.js"></script>
     <script src="/simplebilling/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/simplebilling/js/date.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("ul#nav").find("li").each(function () {
+                var a = $(this).find("a:first")[0];
+                if ($(a).attr("href") === location.pathname) {
+                    $(this).addClass("active");
+                } else {
+                    $(this).removeClass("active");
+                }
+            });
+        });
+    </script>
 </head>
 <body>
 <!--特殊背景-->
@@ -186,15 +198,16 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">Simple <span class="icon-coin-yen"></span> Billing</a>
+                <a class="navbar-brand" href="/simplebilling/page/public/index.html">Simple <span
+                        class="icon-coin-yen"></span> Billing</a>
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
+                <ul class="nav navbar-nav" id="nav">
                     <li class="active">
-                        <a href="#">主页</a>
+                        <a href="/simplebilling/page/public/index.html">主页</a>
                     </li>
                     <li>
-                        <a href="#">进入系统</a>
+                        <a href="/simplebilling/account/ShowAccountServlet">进入系统</a>
                     </li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -202,13 +215,15 @@
                         </a>
                         <ul class="dropdown-menu" style="text-align: center;">
                             <li>
-                                <a href="divider">关于记账</a>
+                                <a href="/simplebilling/page/public/helpRecord.html">关于记账</a>
                             </li>
+                            <li class="divider"></li>
                             <li>
-                                <a href="divider">关于修改</a>
+                                <a href="/simplebilling/page/public/helpModify.html">关于修改</a>
                             </li>
+                            <li class="divider"></li>
                             <li>
-                                <a href="divider">关于导出</a>
+                                <a href="/simplebilling/page/public/helpExport.html">关于导出</a>
                             </li>
                         </ul>
                     </li>
@@ -218,10 +233,12 @@
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <a href="#" style="font-size: 1.2em;"><span class="icon-clipboard"></span> 注册</a>
+                        <a href="/simplebilling/page/public/registerStep1.html" style="font-size: 1.2em;"><span
+                                class="icon-clipboard"></span> 注册</a>
                     </li>
                     <li class="dropdown">
-                        <a href="#" style="font-size: 1.2em;"><span class="icon-enter"></span> 登录</a>
+                        <a href="#" style="font-size: 1.2em;" data-toggle="modal"
+                           data-target="#myModal"><span class="icon-enter"></span> 登录</a>
                     </li>
                 </ul>
             </div>
@@ -229,6 +246,7 @@
         <!-- /.navbar-collapse -->
     </nav>
 </header><!-- /header -->
+
 
 <!-- 模态框（Modal） -->
 <div class="container">
@@ -381,12 +399,19 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h3 class="panel-title">
-                            本周
+                            修改帮助
                         </h3>
                     </div>
                     <div class="panel-body">
-                        <div>
-                            <h3>修改帮助</h3>
+                        <div class="helpUser">
+                            <article>
+                                <p>登录后，显示的就是账本的所有账目，或者在左边栏选择“我的账本”，则显示的是所有的账目</p>
+                                <img src="/simplebilling/img/help/7.png" alt="修改帮助" class="img-responsive">
+                                <p>选择删除，则进行该条目的删除，然后会有删除提示，确定则删除，取消则取消删除</p>
+                                <img src="/simplebilling/img/help/8.png" alt="删除账目">
+                                <p>选择修改，则进行跳转到修改页面,修改成功后，提交即可</p>
+                                <img src="/simplebilling/img/help/9.png" alt="修改页面">
+                            </article>
                         </div>
                     </div>
                 </div>
@@ -394,52 +419,5 @@
         </section>
     </section>
 </section>
-
-
-<!-- 尾部 -->
-<footer class="footer" style="z-index: 1000;">
-    <div class="container">
-        <div class="visible-xs">
-            <h3>联系我</h3>
-            <div class="row">
-                <div class="col-md-12">
-                    <ul>
-                        <li><a href="" target="_blank"><span class="icon-github"></span></a></li>
-                        <li><a href="" target="_blank"><span class="icon-linkedin"></span></a></li>
-                        <li><a href="" target="_blank"><span class="icon-mail4"></span></a></li>
-                        <li><a href="" target="_blank"><span class="icon-bubbles"></span></a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <h3>友情链接</h3>
-        <div class="row">
-            <div class="col-md-12">
-                <ul class="footer-ul">
-                    <li><a href="" title="" target="_blank">暂无</a></li>
-                    <li><a href="" title="" target="_blank">暂无</a></li>
-                </ul>
-                <ul class="footer-ul">
-                    <li><a href="" title="" target="_blank">暂无</a></li>
-                    <li><a href="" title="" target="_blank">暂无</a></li>
-                </ul>
-                <ul class="footer-ul">
-                    <li><a href="" title="" target="_blank">暂无</a></li>
-                    <li><a href="" title="" target="_blank">暂无</a></li>
-                </ul>
-                <ul class="footer-ul">
-                    <li><a href="" title="" target="_blank">暂无</a></li>
-                    <li><a href="" title="" target="_blank">暂无</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12 text-center"><p style="font-size: 1.1em;">CopyRight&copy;2017 | Design By Neal | <a
-                    href="" target="_blank">备案号：</a></p>
-            </div>
-        </div>
-    </div>
-</footer>
-<!-- /footer -->
 </body>
 </html>

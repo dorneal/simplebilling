@@ -14,6 +14,18 @@
     <link rel="stylesheet" href="/simplebilling/css/load.css">
     <script src="/simplebilling/js/jquery-3.2.1.js"></script>
     <script src="/simplebilling/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("ul#nav").find("li").each(function () {
+                var a = $(this).find("a:first")[0];
+                if ($(a).attr("href") === location.pathname) {
+                    $(this).addClass("active");
+                } else {
+                    $(this).removeClass("active");
+                }
+            });
+        });
+    </script>
 </head>
 <body>
 
@@ -190,31 +202,28 @@
                         class="icon-coin-yen"></span> Billing</a>
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
+                <ul class="nav navbar-nav" id="nav">
                     <li class="active">
                         <a href="/simplebilling/page/public/index.html">主页</a>
                     </li>
+                    <li>
+                        <a href="/simplebilling/account/ShowAccountServlet">进入系统</a>
+                    </li>
                     <li class="dropdown">
-                        <a href="/simplebilling/page/public/about.html" class="dropdown-toggle" data-toggle="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             帮助 <b class="caret"></b>
                         </a>
-                        <ul class="dropdown-menu">
+                        <ul class="dropdown-menu" style="text-align: center;">
                             <li>
-                                <a href="#">Action</a>
-                            </li>
-                            <li>
-                                <a href="#">Another action</a>
-                            </li>
-                            <li>
-                                <a href="#">Something else here</a>
+                                <a href="/simplebilling/page/public/helpRecord.html">关于记账</a>
                             </li>
                             <li class="divider"></li>
                             <li>
-                                <a href="#">Separated link</a>
+                                <a href="/simplebilling/page/public/helpModify.html">关于修改</a>
                             </li>
                             <li class="divider"></li>
                             <li>
-                                <a href="#">One more separated link</a>
+                                <a href="/simplebilling/page/public/helpExport.html">关于导出</a>
                             </li>
                         </ul>
                     </li>
@@ -224,12 +233,12 @@
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <a href="registerStep1.html" style="font-size: 1.2em;"><span class="icon-clipboard"></span>
-                            注册</a>
+                        <a href="/simplebilling/page/public/registerStep1.html" style="font-size: 1.2em;"><span
+                                class="icon-clipboard"></span> 注册</a>
                     </li>
                     <li class="dropdown">
-                        <a href="#" style="font-size: 1.2em;" data-toggle="modal" data-target="#myModal"><span
-                                class="icon-enter"></span> 登录</a>
+                        <a href="#" style="font-size: 1.2em;" data-toggle="modal"
+                           data-target="#myModal"><span class="icon-enter"></span> 登录</a>
                     </li>
                 </ul>
             </div>
@@ -237,6 +246,7 @@
         <!-- /.navbar-collapse -->
     </nav>
 </header><!-- /header -->
+
 
 <!-- 模态框（Modal） -->
 <div class="container">
@@ -386,8 +396,11 @@
                         </h3>
                     </div>
                     <div class="panel-body">
-                        <h3>你还未登录哦，现在<a href="#" data-toggle="modal"
-                                        data-target="#myModal">登录</a></h3>
+                        <div>
+                            <h1 style="font-size: 1.5em;">你还未登录哦，现在<a href="#" data-toggle="modal"
+                                                                      data-target="#myModal"
+                                                                      style="color: #67b168">登录</a></h1>
+                        </div>
                     </div>
                 </div>
             </div>

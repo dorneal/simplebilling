@@ -26,8 +26,6 @@ public class WeekAccountServlet extends HttpServlet {
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         AccountService accountService = new AccountServiceImpl();
-        // 创建一个sqlDate
-        Date sqlDate = new Date(new java.util.Date().getTime());
         // 获取session的用户，取得id
         UsersEx usersEx = (UsersEx) request.getSession().getAttribute("user");
         try {
@@ -35,7 +33,7 @@ public class WeekAccountServlet extends HttpServlet {
             List<AccountsEx> accountsExList =
                     accountService.listAccountsByDate(
                             usersEx.getUserId(),
-                            new Date(DateJudgmentUtil.getPeriodOfWeek(DateJudgmentUtil.dayForWeek(sqlDate)).getTime()),
+                            new Date(DateJudgmentUtil.getPeriodOfWeek(DateJudgmentUtil.dayForWeek(new java.util.Date())).getTime()),
                             new Timestamp(System.currentTimeMillis()));
             Gson gson = new Gson();
             String weekAccountsJson = gson.toJson(accountsExList);

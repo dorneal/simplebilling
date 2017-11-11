@@ -77,7 +77,7 @@ public class AccountDaoImpl implements AccountDao {
 
     @Override
     public List<AccountsEx> listAccountsByDate(int id, Date date, Timestamp date2) throws SQLException {
-        String sql = "SELECT * from accounts WHERE User_id=? AND Record_date >= DATE_FORMAT(?,'%Y-%m-%d ') AND Record_date <= DATE_FORMAT(?,'%Y-%m-%d %H:%i:%S');";
+        String sql = "SELECT * from accounts WHERE User_id=? AND Record_date >= DATE_FORMAT(?,'%Y-%m-%d ') AND Record_date <= DATE_FORMAT(?,'%Y-%m-%d %H:%i:%S') ORDER BY Record_date DESC;";
         List<AccountsEx> accountsExList = new ArrayList<>();
         try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
             int index2 = 1;

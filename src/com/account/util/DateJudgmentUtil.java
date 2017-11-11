@@ -50,6 +50,6 @@ public class DateJudgmentUtil {
      * @throws Exception Exception
      */
     public static int dayForMonth() throws Exception {
-        return Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+        return Calendar.getInstance().get(Calendar.DAY_OF_MONTH) - 1;
     }
 }

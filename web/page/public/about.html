@@ -12,6 +12,18 @@
     <script src="/simplebilling/js/jquery-3.2.1.js"></script>
     <script src="/simplebilling/js/bootstrap.min.js"></script>
     <script src="/simplebilling/js/clock.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("ul#nav").find("li").each(function () {
+                var a = $(this).find("a:first")[0];
+                if ($(a).attr("href") === location.pathname) {
+                    $(this).addClass("active");
+                } else {
+                    $(this).removeClass("active");
+                }
+            });
+        });
+    </script>
 </head>
 <body>
 <!--特殊背景-->
@@ -76,7 +88,7 @@
                 y: Math.floor(Math.random() * this.c.height) - this.radius,
                 ax: (Math.random() * 2 - 1) / 1.5,
                 ay: (Math.random() * 2 - 1) / 1.5
-            }
+            };
             this.dots.push(dot);
         }
     };
@@ -183,15 +195,16 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">Simple <span class="icon-coin-yen"></span> Billing</a>
+                <a class="navbar-brand" href="/simplebilling/page/public/index.html">Simple <span
+                        class="icon-coin-yen"></span> Billing</a>
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
+                <ul class="nav navbar-nav" id="nav">
                     <li class="active">
-                        <a href="#">主页</a>
+                        <a href="/simplebilling/page/public/index.html">主页</a>
                     </li>
                     <li>
-                        <a href="#">进入系统</a>
+                        <a href="/simplebilling/account/ShowAccountServlet">进入系统</a>
                     </li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -199,13 +212,15 @@
                         </a>
                         <ul class="dropdown-menu" style="text-align: center;">
                             <li>
-                                <a href="divider">关于记账</a>
+                                <a href="/simplebilling/page/public/helpRecord.html">关于记账</a>
                             </li>
+                            <li class="divider"></li>
                             <li>
-                                <a href="divider">关于修改</a>
+                                <a href="/simplebilling/page/public/helpModify.html">关于修改</a>
                             </li>
+                            <li class="divider"></li>
                             <li>
-                                <a href="divider">关于导出</a>
+                                <a href="/simplebilling/page/public/helpExport.html">关于导出</a>
                             </li>
                         </ul>
                     </li>
@@ -215,10 +230,12 @@
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <a href="#" style="font-size: 1.2em;"><span class="icon-clipboard"></span> 注册</a>
+                        <a href="/simplebilling/page/public/registerStep1.html" style="font-size: 1.2em;"><span
+                                class="icon-clipboard"></span> 注册</a>
                     </li>
                     <li class="dropdown">
-                        <a href="#" style="font-size: 1.2em;"><span class="icon-enter"></span> 登录</a>
+                        <a href="#" style="font-size: 1.2em;" data-toggle="modal"
+                           data-target="#myModal"><span class="icon-enter"></span> 登录</a>
                     </li>
                 </ul>
             </div>
@@ -226,6 +243,7 @@
         <!-- /.navbar-collapse -->
     </nav>
 </header><!-- /header -->
+
 
 <!-- 模态框（Modal） -->
 <div class="container">

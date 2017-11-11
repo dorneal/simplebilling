@@ -290,3 +290,14 @@ div#v_container {
     height: 50px;
     margin-bottom: 10px;
 }
+
+div.helpUser p {
+    font-size: 1.4em;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+div.helpUser img {
+    margin: 0 auto;
+    max-width: 100%;
+}

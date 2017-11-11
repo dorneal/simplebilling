@@ -23,11 +23,10 @@ public class ExportAccountByWeekServlet extends HttpServlet {
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         UsersEx usersEx = (UsersEx) request.getSession().getAttribute("user");
-        Date sqlDate = new Date(new java.util.Date().getTime());
         try {
             // 调用Excel工具类导出方法
             HSSFWorkbook wb = ExportExcelUtil.export(usersEx.getUserId(),
-                    new Date(DateJudgmentUtil.getPeriodOfWeek(DateJudgmentUtil.dayForWeek(sqlDate)).getTime()),
+                    new Date(DateJudgmentUtil.getPeriodOfWeek(DateJudgmentUtil.dayForWeek(new java.util.Date())).getTime()),
                     new Timestamp(System.currentTimeMillis()), "本周账本");
             response.setContentType("application/vnd.ms-excel");
             response.setHeader("Content-disposition", "attachment;filename=myAccountOfWeek.xls");
