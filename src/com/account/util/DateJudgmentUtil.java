@@ -29,9 +29,8 @@ public class DateJudgmentUtil {
      *
      * @param date 当前时间
      * @return 时间段
-     * @throws Exception Exception
      */
-    public static int dayForWeek(Date date) throws Exception {
+    public static int dayForWeek(Date date) {
         Calendar c = Calendar.getInstance();
         c.setTime(date);
         int dayForWeek;
@@ -47,9 +46,8 @@ public class DateJudgmentUtil {
      * 返回一个到这个月1号的时间段
      *
      * @return int
-     * @throws Exception Exception
      */
-    public static int dayForMonth() throws Exception {
+    public static int dayForMonth() {
         return Calendar.getInstance().get(Calendar.DAY_OF_MONTH) - 1;
     }
 }

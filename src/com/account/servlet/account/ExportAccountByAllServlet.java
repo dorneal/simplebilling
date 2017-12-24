@@ -4,11 +4,9 @@ import com.account.entity.UsersEx;
 import com.account.util.ExportExcelUtil;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -20,7 +18,7 @@ import java.sql.Timestamp;
  */
 public class ExportAccountByAllServlet extends HttpServlet {
     @Override
-    protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void service(HttpServletRequest request, HttpServletResponse response) {
         // 获取session中的user对象
         UsersEx usersEx = (UsersEx) request.getSession().getAttribute("user");
         // 拿到用户的注册日期

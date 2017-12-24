@@ -5,7 +5,6 @@ import com.account.service.UserService;
 import com.account.service.impl.UserServiceImpl;
 import com.google.gson.Gson;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,7 +19,7 @@ import java.sql.SQLException;
  */
 public class UserLoginServlet extends HttpServlet {
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         PrintWriter out = response.getWriter();
         // 获取前端传来的json字符串
         String userJson = request.getParameter("userJson");

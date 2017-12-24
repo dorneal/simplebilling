@@ -23,7 +23,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public UsersEx login(UsersEx usersEx) throws SQLException {
+    public UsersEx login(UsersEx usersEx) {
         UsersEx usersEx1 = new UsersEx();
         String sql = "SELECT * FROM users WHERE User_password=? AND User_phoneNum=?;";
         try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
@@ -108,7 +108,6 @@ public class UserDaoImpl implements UserDao {
             int count = resultSet.getInt(1);
             if (count != 0) {
                 return count;
-
             }
         }
         return 0;

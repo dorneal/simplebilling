@@ -4,7 +4,6 @@ import com.account.entity.UsersEx;
 import com.account.service.UserService;
 import com.account.service.impl.UserServiceImpl;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,7 +18,7 @@ import java.sql.SQLException;
  */
 public class ModifyPasswordServlet extends HttpServlet {
     @Override
-    protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void service(HttpServletRequest request, HttpServletResponse response) throws IOException {
         PrintWriter out = response.getWriter();
         // 获取新旧密码
         String password = request.getParameter("oldPassword");

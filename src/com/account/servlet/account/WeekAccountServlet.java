@@ -7,11 +7,9 @@ import com.account.service.impl.AccountServiceImpl;
 import com.account.util.DateJudgmentUtil;
 import com.google.gson.Gson;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -24,7 +22,7 @@ import java.util.List;
  */
 public class WeekAccountServlet extends HttpServlet {
     @Override
-    protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void service(HttpServletRequest request, HttpServletResponse response) {
         AccountService accountService = new AccountServiceImpl();
         // 获取session的用户，取得id
         UsersEx usersEx = (UsersEx) request.getSession().getAttribute("user");

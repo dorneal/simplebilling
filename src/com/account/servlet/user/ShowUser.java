@@ -5,7 +5,6 @@ import com.account.entity.UsersEx;
 import com.account.service.AccountService;
 import com.account.service.impl.AccountServiceImpl;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,7 +19,7 @@ import java.util.List;
  */
 public class ShowUser extends HttpServlet {
     @Override
-    protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void service(HttpServletRequest request, HttpServletResponse response) throws IOException {
         // 获取session中的user对象
         UsersEx user = (UsersEx) request.getSession().getAttribute("user");
         AccountService accountService = new AccountServiceImpl();
